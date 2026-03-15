@@ -160,6 +160,11 @@ VISUAL LAYOUT STRUCTURE:
             const data = await response.json();
             let finalOutput = (data.choices[0]?.message?.content || '').trim();
 
+            // Detect OpenAI refusal/safety trigger
+            if (finalOutput.toLowerCase().includes("i'm sorry") || finalOutput.toLowerCase().includes("can't assist") || finalOutput.toLowerCase().includes("cannot assist")) {
+                throw new Error("اعتذر الذكاء الاصطناعي عن معالجة هذا الطلب. قد يكون ذلك بسبب سياسات المحتوى (مثل المنتجات الطبية الحساسة أو الصور غير المتوافقة). يرجى تجربة وصف أكثر مهنية أو صورة مختلفة.");
+            }
+
             // تنظيف علامات الكود (```) إذا قام النموذج بإضافتها
             finalOutput = finalOutput.replace(/^```[\w]*\n/g, '').replace(/\n```$/g, '');
 
@@ -425,6 +430,24 @@ VISUAL LAYOUT STRUCTURE:
                                     <h3 className="font-bold text-sm mb-1">طاقة بلا حدود</h3>
                                     <p className="text-white/40 text-xs">تعمل هذه الأداة الآن بمحرك GPT-4o القوي.</p>
                                 </div>
+                            </div>
+                        </div>
+
+                        {/* ── Safety Policy Section ── */}
+                        <div className={card + ' border-red-500/20 bg-red-500/5'}>
+                            <div className="flex items-center gap-2 text-red-400 mb-2">
+                                <Info size={15} /><h3 className="font-bold text-sm">سياسة المحتوى</h3>
+                            </div>
+                            <p className="text-[10px] text-white/40 leading-relaxed mb-3">
+                                قد يرفض الذكاء الاصطناعي معالجة بعض المنتجات التي تخالف سياساته.
+                            </p>
+                            <div className="space-y-2">
+                                <p className="text-[9px] text-white/30 flex items-center gap-2">
+                                    <span className="w-1 h-1 bg-red-400 rounded-full"></span> تجنب الصور الحساسة.
+                                </p>
+                                <p className="text-[9px] text-white/30 flex items-center gap-2">
+                                    <span className="w-1 h-1 bg-red-400 rounded-full"></span> استخدم مسميات مهنية.
+                                </p>
                             </div>
                         </div>
                     </div>

@@ -165,6 +165,12 @@ ${pricingContext}
 
             const data = await response.json();
             const outputText = (data.choices[0]?.message?.content || '').trim();
+
+            // Detect OpenAI refusal/safety trigger
+            if (outputText.toLowerCase().includes("i'm sorry") || outputText.toLowerCase().includes("can't assist") || outputText.toLowerCase().includes("cannot assist")) {
+                throw new Error("اعتذر الذكاء الاصطناعي عن معالجة هذا الطلب. قد يكون ذلك بسبب سياسات المحتوى (مثل المنتجات الطبية الحساسة أو الصور غير المتوافقة). يرجى تجربة وصف أكثر مهنية أو صورة مختلفة.");
+            }
+
             setGeneratedText(outputText);
             
             // Timing Fix: Ensure total wait time is 30 seconds

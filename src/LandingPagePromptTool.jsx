@@ -115,6 +115,19 @@ Use this EXACT comprehensive template, filling in the bracketed placeholders wit
         ];
 
         try {
+            const contentArray = [
+                { type: "text", text: internalPrompt }
+            ];
+            
+            if (images.length > 0) {
+                images.forEach(imgData => {
+                    contentArray.push({
+                        type: "image_url",
+                        image_url: { url: imgData }
+                    });
+                });
+            }
+
             const response = await fetch('https://api.openai.com/v1/chat/completions', {
                 method: 'POST',
                 headers: {
@@ -136,6 +149,11 @@ Use this EXACT comprehensive template, filling in the bracketed placeholders wit
 
             const data = await response.json();
             let finalOutput = (data.choices[0]?.message?.content || '').trim();
+
+            // Detect OpenAI refusal/safety trigger
+            if (finalOutput.toLowerCase().includes("i'm sorry") || finalOutput.toLowerCase().includes("can't assist") || finalOutput.toLowerCase().includes("cannot assist")) {
+                throw new Error("اعتذر الذكاء الاصطناعي عن معالجة هذا الطلب. قد يكون ذلك بسبب سياسات المحتوى (مثل المنتجات الطبية الحساسة أو الصور غير المتوافقة). يرجى تجربة وصف أكثر مهنية أو صورة مختلفة.");
+            }
 
             // تنظيف علامات الكود (```) إذا قام النموذج بإضافتها
             finalOutput = finalOutput.replace(/^```[\w]*\n/g, '').replace(/\n```$/g, '');
@@ -399,7 +417,7 @@ Use this EXACT comprehensive template, filling in the bracketed placeholders wit
                                 <p className="text-[10px] text-white/40 font-mono line-clamp-3 leading-relaxed">
                                     "Act as a world-class Mobile E-commerce Designer... HUGE WHITE BOLD TEXT: 'استعيدي أنوثتك وثقتك بنفسك اليوم!'..."
                                 </p>
-                                <button 
+                                <button
                                     onClick={() => {
                                         const sample = `"Act as a world-class Mobile E-commerce Designer. Generate an ultra-long vertical infographic landing page IMAGE (aspect ratio 9:32) for the product in the uploaded image... HUGE WHITE BOLD TEXT: 'استعيدي أنوثتك وثقتك بنفسك اليوم!'... LARGE BOLD COLORED TEXT: 'الحل المثالي لإبراز معالم الأنوثة'..."`;
                                         navigator.clipboard.writeText(sample);
@@ -409,6 +427,24 @@ Use this EXACT comprehensive template, filling in the bracketed placeholders wit
                                 >
                                     نسخ برومبت "زيادة مناطق الأنوثة"
                                 </button>
+                            </div>
+                        </div>
+
+                        {/* ── Safety Policy Section ── */}
+                        <div className={card + ' border-red-500/20 bg-red-500/5'}>
+                            <div className="flex items-center gap-2 text-red-400 mb-2">
+                                <Info size={15} /><h3 className="font-bold text-sm">سياسة المحتوى</h3>
+                            </div>
+                            <p className="text-[10px] text-white/40 leading-relaxed mb-3">
+                                قد يرفض الذكاء الاصطناعي معالجة بعض المنتجات الطبية أو الصور التي تخالف سياساته.
+                            </p>
+                            <div className="space-y-2">
+                                <p className="text-[9px] text-white/30 flex items-center gap-2">
+                                    <span className="w-1 h-1 bg-red-400 rounded-full"></span> تجنب الصور غير المحتشمة.
+                                </p>
+                                <p className="text-[9px] text-white/30 flex items-center gap-2">
+                                    <span className="w-1 h-1 bg-red-400 rounded-full"></span> استخدم مسميات مهنية للمنتجات.
+                                </p>
                             </div>
                         </div>
                     </div>
