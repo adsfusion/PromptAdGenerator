@@ -409,23 +409,6 @@ Use this EXACT comprehensive template, filling in the bracketed placeholders wit
                             </div>
                         </div>
 
-                        {/* ── Safety Policy Section ── */}
-                        <div className={card + ' border-red-500/20 bg-red-500/5'}>
-                            <div className="flex items-center gap-2 text-red-400 mb-2">
-                                <Info size={15} /><h3 className="font-bold text-sm">سياسة المحتوى</h3>
-                            </div>
-                            <p className="text-[10px] text-white/40 leading-relaxed mb-3">
-                                قد يرفض الذكاء الاصطناعي معالجة بعض المنتجات الطبية أو الصور التي تخالف سياساته.
-                            </p>
-                            <div className="space-y-2">
-                                <p className="text-[9px] text-white/30 flex items-center gap-2">
-                                    <span className="w-1 h-1 bg-red-400 rounded-full"></span> تجنب الصور غير المحتشمة.
-                                </p>
-                                <p className="text-[9px] text-white/30 flex items-center gap-2">
-                                    <span className="w-1 h-1 bg-red-400 rounded-full"></span> استخدم مسميات مهنية للمنتجات.
-                                </p>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
