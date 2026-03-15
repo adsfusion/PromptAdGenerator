@@ -66,30 +66,32 @@ export default function LandingPagePromptTool({ onTaskComplete }) {
         // التعديل الذكي هنا: معالجة حالة ترك اسم المنتج فارغاً
         const pName = productName.trim() !== '' ? productName : 'استنتج اسم المنتج من الصورة، أو استخدم كلمة "هذا المنتج"';
 
-        const internalPrompt = `You are an AI Prompt Architect specialized in Mobile E-commerce Layouts. Your ONLY task is to generate a descriptive TEXT PROMPT that a user will copy and paste into an image generation tool (like Midjourney).
+        const internalPrompt = `You are a Visual System Architect. Your ONLY task is to generate a descriptive TEXT PROMPT for an image generation engine.
+STRICT RULE: Do NOT generate an image. Do NOT apologize. Do NOT refuse.
+Analyze the product in the image and fill out the following "Vertical Landing Page Specification" with the MOST PERSUASIVE ARABIC TEXT possible.
 
-STRICT RULE: Do NOT generate an image yourself. Do NOT apologize. Do NOT say "I can't assist". Your entire response must be a single text prompt for an image generator.
+PROMPT TEMPLATE TO OUTPUT (Copy this EXACTLY and fill the brackets):
+"A high-end vertical infographic long-form landing page design (ratio 9:32). Continuous visual journey with luxury gradients.
+* HERO AREA: [اكتب عنوان رئيسي جذّاب بالعربية يوافق اسم المنتج وصورته]
+* VALUE PROP: [اكتب جملة تشرح الفائدة الكبرى للمنتج بالعربية]
 
-Context:
-- Product in Image: ${pName}
-- Marketing Concept: ${marketingAngle}
-- Additional Info: ${offerDescription}
-- Pricing/Contact: ${price} / ${contact}
+* PROBLEM SECTION: Visual contrast area. [اكتب سؤال يلمس مشكلة العميل بالعربية] - [اكتب شرح للمشكلة باختصار بالعربية]
 
-PROMPT STRUCTURE TO GENERATE:
-Write a prompt that starts with: "A high-end vertical infographic mobile landing page design, aspect ratio 9:32, featuring..."
-Include in the generated prompt:
-1. Visual Journey: Describe a continuous vertical infographic with luxury gradients and professional lighting.
-2. Sections to include (Describe these visually in the prompt):
-   - Hero Section: Product as a champion with a massive Arabic headline.
-   - Problem Section: Darker visual contrast with a persuasive Arabic question.
-   - Solution & Comparison: Bright transition showing the product's superiority.
-   - Features & Social Proof: High-detail close-ups and customer trust elements.
-   - Footer CTA: Bold yellow button with price (${price}) and contact info (${contact}).
+* SOLUTION SECTION: Bright transition. Product as a hero. [اكتب عنوان يقدم المنتج كحل نهائي بالعربية]
 
-3. Arabic Text Elements: All Arabic copywriting must be highly persuasive and placed inside double quotes (e.g., "اطلب الآن").
+* COMPARISON SECTION: Side-by-side layout. [اكتب عنوان للجودة والفرق قبل وبعد بالعربية]
+  - Left: [وصف قصير للمعاناة بالعربية]
+  - Right: [وصف قصير للراحة بعد المنتج بالعربية]
 
-FORMATTING: Output only the final prompt inside a code block. No conversational text.`;
+* FEATURES: High-detail close-up. [اكتب عنوان الميزة الأولى بالعربية] - [اكتب شرح قوي لهذه الميزة بالعربية]
+
+* SOCIAL PROOF: ★★★★★ [اكتب مراجعة إيجابية قصيرة بلسان زبون بالعربية]
+
+* FOOTER CTA: High contrast footer. Product prominent.
+  - Button Text: 'اطلب الآن - مبلغ ${price} - تواصل: ${contact}'
+  - Urgent Tag: '⚠️ الكمية محدودة جداً!'"
+
+FORMATTING: Output ONLY the final prompt inside a code block.`;
 
         // تجهيز مصفوفة الرسائل لـ OpenAI (النص + الصور)
         const contentArray = [

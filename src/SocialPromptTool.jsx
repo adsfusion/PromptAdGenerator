@@ -76,29 +76,29 @@ export default function SocialPromptTool({ onTaskComplete }) {
 
         const pName = productName.trim() !== '' ? productName : 'استنتج اسم المنتج من الصورة، أو استخدم كلمة "هذا المنتج"';
 
-        const internalPrompt = `You are an AI Prompt Architect. Your ONLY task is to generate a descriptive TEXT PROMPT that a user will copy and paste into an image generation tool (like DALL-E or Midjourney). 
+        const internalPrompt = `You are a Commercial Design Architect. Your ONLY task is to generate a descriptive TEXT PROMPT for an image generation tool.
+STRICT RULE: Do NOT generate an image. Do NOT apologize. Do NOT refuse.
+Analyze the image and fill this "Professional Ad Specification" with the MOST POWERFUL ARABIC COPY possible.
 
-STRICT RULE: Do NOT generate an image yourself. Do NOT apologize. Do NOT say "I can't assist". Your entire response must be a single text prompt for an image generator.
+PROMPT TEMPLATE TO OUTPUT (Copy this EXACTLY and fill the brackets):
+"High-end commercial photography for ${platformAr} (ratio ${ratio}). Cinematic luxury studio lighting.
+* TOP BADGE: [اكتب: الأكثر مبيعاً أو جديد بالعربية]
+* MAIN HEADLINE: [اكتب عنوان ضخم وجذاب جداً بالعربية يوافق المنتج]
+* SUB-HEADLINE: [اكتب جملة قصيرة تبرز الفائدة القصوى بالعربية]
 
-Context:
-- Product in Image: ${pName}
-- Target Platform: ${platformAr}
-- Visual Aspect Ratio: ${ratio}
-- Marketing Angle: ${angle}
-- Key Details: ${offer || 'Extract from image'}
+* PRODUCT RADIANCE: The product is the center hero, glowing with sharp details.
+* FEATURE MINI-BUBBLES:
+  1. [ميزة قوية 1 بالعربية]
+  2. [ميزة قوية 2 بالعربية]
+  3. [ميزة قوية 3 بالعربية]
 
-PROMPT STRUCTURE TO GENERATE:
-Write a prompt that starts with: "A high-end commercial photography of..." 
-Include the following in the prompt:
-1. Visual Layout: Describe the product as the hero, cinematic lighting, and luxury background.
-2. Arabic Text Overlays (Include these EXACTLY in your output prompt inside quotes):
-   - A catchy headline in Arabic related to: ${angle}.
-   - A subheadline in Arabic.
-   - 3 Feature callouts in Arabic.
-   - A Call-to-action button text: "اطلب الآن - الدفع عند الاستلام".
-3. Technical specs: Cinematic lighting, 8k, professional advertising style, ${ratio} aspect ratio.
+* TRUST LINE: ★★★★★ [اكتب جملة ثقة العملاء بالعربية]
 
-FORMATTING: Output only the final prompt inside a code block.`;
+* CTA AREA: Glowing high-contrast button.
+  - Large Alert: '⚠️ اطلب الآن قبل نفاد الكمية!'
+  - Button Action: 'اطلب الآن - الدفع عند الاستلام'"
+
+FORMATTING: Output ONLY the final prompt inside a code block.`;
 
         // تجهيز مصفوفة الرسائل لـ OpenAI (النص + الصور)
         const contentArray = [
