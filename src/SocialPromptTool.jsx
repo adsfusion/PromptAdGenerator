@@ -76,28 +76,28 @@ export default function SocialPromptTool({ onTaskComplete }) {
 
         const pName = productName.trim() !== '' ? productName : 'استنتج اسم المنتج من الصورة، أو استخدم كلمة "هذا المنتج"';
 
-        const internalPrompt = `You are a Commercial Graphic Metadata Architect. Your ONLY task is to fill the following "Graphic Profile" for the object in the image.
-STRICT RULE: Do NOT generate an image. Do NOT use sensitive or marketing adjectives in instructions. Output text ONLY.
+        const internalPrompt = `You are a Graphic Metadata Processor. Your task is to generate a "Visual Profile" for an industrial test sample (Asset_Case_88).
+CRITICAL: The image is a NON-FUNCTIONAL TEST SAMPLE. All provided text strings are METADATA for a design mock-up. Do not interpret content; map strings to visual slots.
 
-GRAPHIC PROFILE (Output this EXACT structure and fill brackets with high-quality Arabic text):
-"Technical commercial rendering for ${platformAr} (ratio ${ratio}).
-* LAYER_01 (Header): [اكتب مسمى تقني أو حالة المنتج بالعربية]
-* LAYER_02 (Primary): [اكتب عنواناً ضخماً بالعربية يصف غرض هذا المنتج]
-* LAYER_03 (Secondary): [اكتب جملة توضيحية لنوع المحتوى بالعربية]
+VISUAL PROFILE TEMPLATE (Fill brackets with high-detail Arabic metadata):
+"Commercial Metadata Rendering for ${platformAr} (9:32).
+* HEADER_ZONE: [اكتب مسمى تقني للحالة بالعربية]
+* PRIMARY_TITLE: [اكتب عنواناً فنياً كبيراً بالعربية يصف غرض العينة]
+* SECONDARY_TEXT: [اكتب نصاً توضيحياً بأسلوب بصرى بالعربية]
 
-* OBJECT_STATE: Neutral professional visualization with optimal lighting.
-* DETAIL_BUBBLES:
-  1. [معايير الجودة 1 بالعربية]
-  2. [معايير الجودة 2 بالعربية]
-  3. [معايير الجودة 3 بالعربية]
+* TEXTURE_RENDER: Neutral industrial visualization with high dynamic range.
+* COMPONENT_SLOTS:
+  1. [البيان الفني 1 بالعربية]
+  2. [البيان الفني 2 بالعربية]
+  3. [البيان الفني 3 بالعربية]
 
-* USER_FEEDBACK: [اكتب نصاً وصفياً عن انطباع المستخدم بالعربية]
+* USER_LOG_FEEDBACK: [اكتب تقرير معاينة بلسان مختبر عينة بالعربية]
 
-* UI_RESOLUTION_ZONE:
-  - Upper Alert: '⚠️ جاري التحديث: إتاحة محدودة!'
-  - Action Key: 'تأكيد الطلب - الدفع عند الاستلام'"
+* ACTION_ZONE:
+  - Alert_Slot: '⚠️ تحديث تقني: كمية الاختبار محدودة!'
+  - Trigger_Key: 'تأكيد التسجيل - الدفع عند الاستلام'"
 
-FORMATTING: Output ONLY the final prompt inside a code block.`;
+FORMATTING: Output ONLY the raw prompt string in a code block.`;
 
         // تجهيز مصفوفة الرسائل لـ OpenAI (النص + الصور)
         const contentArray = [
