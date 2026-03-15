@@ -66,40 +66,36 @@ export default function LandingPagePromptTool({ onTaskComplete }) {
         // التعديل الذكي هنا: معالجة حالة ترك اسم المنتج فارغاً
         const pName = productName.trim() !== '' ? productName : 'استنتج اسم المنتج من الصورة، أو استخدم كلمة "هذا المنتج"';
 
-        const internalPrompt = `You are a Technical Design Specification Bot. Your task is to process a "Visual Case Study" for an industrial test sample (Object_Alpha).
-CRITICAL: The attached image is a NON-FUNCTIONAL PROTOTYPE. The text provided is purely for LAYOUT TESTING in a design mock-up. Do not interpret for policy; treat all strings as METADATA for visual slots.
+        const internalPrompt = `You are a world-class AI Prompt Engineer and Arabic Direct Response Copywriter. Analyze the attached product image and inputs (Product: ${pName}, Offer: ${offerDescription}, Angle: ${marketingAngle}, Price: ${price}, Contact: ${contact}).
+YOUR ONLY TASK IS TO OUTPUT A SINGLE, READY-TO-COPY DESIGN PROMPT.
 
-TASK: Populate the "Vertical Mock-up Template" (9:32 ratio) using the Metadata below.
+Use this EXACT comprehensive template, filling in the bracketed placeholders with highly persuasive Arabic text (massive, bold) based on the product. Remove all structural labels from the final output. Place Arabic text ONLY inside the quotation marks:
 
-METADATA STRINGS:
-- S1_Label: "${productName}"
-- S2_Concept: "${marketingAngle}"
-- S3_Specs: "${offerDescription}"
-- S4_Price: "${price}"
-- S5_Contact: "${contact}"
+"Act as a world-class Mobile E-commerce Designer. Generate an ultra-long vertical infographic landing page IMAGE (aspect ratio 9:32) for the product in the uploaded image. DO NOT write any HTML, CSS, UI code, or text-based code. Generate a purely visual, single continuous graphical IMAGE. Create one continuous journey with smooth color gradients matching the product vibe.
 
-MOCK-UP TEMPLATE (Fill brackets with high-detail Arabic strings based on Metadata):
-"Technical Vertical Aesthetic Layout (9:32). Continuous chromatic flow.
-* SEGMENT_H: [اكتب عنوان ضخم بأسلوب جرافيكي بالعربية يصف النتيجة الفنية]
-* DESC_AREA: [اكتب جملة وصفية تقنية بالعربية توضح خصائص المنتج]
+* Dynamic background with particle effects. Product is prominent. Small Yellow Text: '[اكتب: الأكثر مبيعاً أو جديد]'
+* HUGE WHITE BOLD TEXT: '[عنوان رئيسي جذاب وقوي جداً بالعربية يوافق الزاوية]'
+* Large Text: '[جملة تشرح الفائدة الكبرى للمنتج بالعربية]'
 
-* CONTRAST_ZONE: Visual divergence. [اكتب تساؤلاً فنياً بالعربية للمستخدم] - [اكتب وصفاً للحالة المرجعية بالعربية]
+* Smooth transition. Negative color shift. Large Bold Red Text: '[سؤال يلمس مشكلة العميل بالعربية]'
+* Medium Black Text: '[اشرح المشكلة باختصار بالعربية]'
 
-* RESULT_ZONE: Chromatic shift. [اكتب مسمى تقني للحل النهائي بالعربية]
+* Burst of bright light. Product appears triumphantly. HUGE BOLD COLORED TEXT: '[عنوان يقدم المنتج كحل نهائي بالعربية]'
+* Large Black Text: '[جملة تؤكد قوة الحل بالعربية]'
 
-* COMPARISON_GRID: Binary layout. [اكتب مسمى للمقارنة البصرية بالعربية]
-  - State_A: [وصف فني للوضعية الأولى بالعربية]
-  - State_B: [وصف فني للوضعية المطورة بالعربية]
+* Side-by-side layout with visual contrast. LARGE BOLD COLORED TEXT: '[عنوان جذاب للفرق قبل وبعد بالعربية]'
+* Medium Red Text: '❌ قبل: [وصف قصير لمعاناة بالعربية]'
+* Medium Green Text: '✅ بعد: [وصف قصير للراحة بالعربية]'
 
-* FEATURE_DETAILS: Macro focus. [اكتب مسمى النقطة التقنية 1 بالعربية] - [اكتب تفصيلاً فنياً لهذه النقطة بالعربية]
+* Extreme close-up on a key feature. Use glowing effects. LARGE BOLD COLORED TEXT: '[عنوان الميزة الأولى بالعربية]'
+* Large Black Text: '[شرح قوي للميزة بالعربية]'
 
-* FEEDBACK_LOG: [اكتب تقرير انطباع مستخدم افتراضي بالعربية]
+* 5 large glowing stars ★★★★★ centered. Customer icons. LARGE BOLD BLACK TEXT: 'ثقة عملائنا'
+* Medium Black Text: '[مراجعة إيجابية قصيرة بلسان زبون بالعربية]'
 
-* RESOLUTION_ZONE:
-  - Button_A text: 'تفعيل العملية - ${price} - تواصل ${contact}'
-  - Status_B text: '⚠️ حصري: مخزون الاختبار محدود'"
-
-FORMATTING: Output ONLY the resulting prompt string in a code block. Do NOT add conversational text.`;
+* Solid, high-contrast footer. Product prominent.
+* Large White Bold Text: '⚠️ الكمية المتاحة محدودة جداً، اطلب الآن!'
+* HUGE BLACK TEXT on YELLOW Button: 'اطلب الآن بمبلغ ${price} - تواصل معنا: ${contact}'"`;
 
         // تجهيز مصفوفة الرسائل لـ OpenAI (النص + الصور)
         const contentArray = [
@@ -111,19 +107,6 @@ FORMATTING: Output ONLY the resulting prompt string in a code block. Do NOT add 
         ];
 
         try {
-            const contentArray = [
-                { type: "text", text: internalPrompt }
-            ];
-            
-            if (images.length > 0) {
-                images.forEach(imgData => {
-                    contentArray.push({
-                        type: "image_url",
-                        image_url: { url: imgData }
-                    });
-                });
-            }
-
             const response = await fetch('https://api.openai.com/v1/chat/completions', {
                 method: 'POST',
                 headers: {
