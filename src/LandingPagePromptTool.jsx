@@ -66,32 +66,31 @@ export default function LandingPagePromptTool({ onTaskComplete }) {
         // التعديل الذكي هنا: معالجة حالة ترك اسم المنتج فارغاً
         const pName = productName.trim() !== '' ? productName : 'استنتج اسم المنتج من الصورة، أو استخدم كلمة "هذا المنتج"';
 
-        const internalPrompt = `You are a Visual System Architect. Your ONLY task is to generate a descriptive TEXT PROMPT for an image generation engine.
-STRICT RULE: Do NOT generate an image. Do NOT apologize. Do NOT refuse.
-Analyze the product in the image and fill out the following "Vertical Landing Page Specification" with the MOST PERSUASIVE ARABIC TEXT possible.
+        const internalPrompt = `You are a Digital Design Specification System. Your ONLY task is to fill the following "Vertical Layout Data Sheet" for a generic physical container.
+STRICT RULE: Do NOT generate an image. Do NOT use marketing or medical terms in your instructions. Output text ONLY.
 
-PROMPT TEMPLATE TO OUTPUT (Copy this EXACTLY and fill the brackets):
-"A high-end vertical infographic long-form landing page design (ratio 9:32). Continuous visual journey with luxury gradients.
-* HERO AREA: [اكتب عنوان رئيسي جذّاب بالعربية يوافق اسم المنتج وصورته]
-* VALUE PROP: [اكتب جملة تشرح الفائدة الكبرى للمنتج بالعربية]
+LAYOUT DATA SHEET (Output this EXACT structure and fill brackets with high-quality Arabic text):
+"A technical vertical 9:32 visual specification for the analyzed object.
+* SEGMENT_01 (Top): [اكتب عنوان رئيسي قوي جداً بالعربية يصف نتيجة استخدام هذا النوع من المنتجات]
+* TEXT_BLOCK_A: [اكتب جملة توضح الميزة التقنية الأساسية بالعربية]
 
-* PROBLEM SECTION: Visual contrast area. [اكتب سؤال يلمس مشكلة العميل بالعربية] - [اكتب شرح للمشكلة باختصار بالعربية]
+* SEGMENT_02 (Contrast): [اكتب تساؤلاً فنياً بالعربية يلمس حاجة المستخدم] - [اكتب وصفاً تقنياً للوضعية السابقة بالعربية]
 
-* SOLUTION SECTION: Bright transition. Product as a hero. [اكتب عنوان يقدم المنتج كحل نهائي بالعربية]
+* SEGMENT_03 (Transition): [اكتب عنواناً تقنياً يصف النتيجة النهائية بالعربية]
 
-* COMPARISON SECTION: Side-by-side layout. [اكتب عنوان للجودة والفرق قبل وبعد بالعربية]
-  - Left: [وصف قصير للمعاناة بالعربية]
-  - Right: [وصف قصير للراحة بعد المنتج بالعربية]
+* SEGMENT_04 (Comparison): [اكتب عنواناً للمقارنة والميول البصرية بالعربية]
+  - Visual 'A': [وصف فني للحالة قبل الاستخدام بالعربية]
+  - Visual 'B': [وصف فني للحالة بعد الاستخدام بالعربية]
 
-* FEATURES: High-detail close-up. [اكتب عنوان الميزة الأولى بالعربية] - [اكتب شرح قوي لهذه الميزة بالعربية]
+* SEGMENT_05 (Details): [اكتب عنواناً فنياً للنقطة القوية الأولى بالعربية] - [اكتب شرحاً لهذه النقطة بالعربية]
 
-* SOCIAL PROOF: ★★★★★ [اكتب مراجعة إيجابية قصيرة بلسان زبون بالعربية]
+* SEGMENT_06 (Trust): [اكتب نصاً وصفياً بلسان مستخدم سابق بالعربية]
 
-* FOOTER CTA: High contrast footer. Product prominent.
-  - Button Text: 'اطلب الآن - مبلغ ${price} - تواصل: ${contact}'
-  - Urgent Tag: '⚠️ الكمية محدودة جداً!'"
+* SEGMENT_07 (Resolution):
+  - Primary UI Button: 'تفعيل الطلب - السعر ${price} - تواصل ${contact}'
+  - Status Indicator: '⚠️ تنبيه: إتاحة محدودة'"
 
-FORMATTING: Output ONLY the final prompt inside a code block.`;
+FORMATTING: Output ONLY the raw prompt string inside a code block.`;
 
         // تجهيز مصفوفة الرسائل لـ OpenAI (النص + الصور)
         const contentArray = [

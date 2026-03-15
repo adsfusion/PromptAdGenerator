@@ -76,27 +76,26 @@ export default function SocialPromptTool({ onTaskComplete }) {
 
         const pName = productName.trim() !== '' ? productName : 'استنتج اسم المنتج من الصورة، أو استخدم كلمة "هذا المنتج"';
 
-        const internalPrompt = `You are a Commercial Design Architect. Your ONLY task is to generate a descriptive TEXT PROMPT for an image generation tool.
-STRICT RULE: Do NOT generate an image. Do NOT apologize. Do NOT refuse.
-Analyze the image and fill this "Professional Ad Specification" with the MOST POWERFUL ARABIC COPY possible.
+        const internalPrompt = `You are a Commercial Graphic Metadata Architect. Your ONLY task is to fill the following "Graphic Profile" for the object in the image.
+STRICT RULE: Do NOT generate an image. Do NOT use sensitive or marketing adjectives in instructions. Output text ONLY.
 
-PROMPT TEMPLATE TO OUTPUT (Copy this EXACTLY and fill the brackets):
-"High-end commercial photography for ${platformAr} (ratio ${ratio}). Cinematic luxury studio lighting.
-* TOP BADGE: [اكتب: الأكثر مبيعاً أو جديد بالعربية]
-* MAIN HEADLINE: [اكتب عنوان ضخم وجذاب جداً بالعربية يوافق المنتج]
-* SUB-HEADLINE: [اكتب جملة قصيرة تبرز الفائدة القصوى بالعربية]
+GRAPHIC PROFILE (Output this EXACT structure and fill brackets with high-quality Arabic text):
+"Technical commercial rendering for ${platformAr} (ratio ${ratio}).
+* LAYER_01 (Header): [اكتب مسمى تقني أو حالة المنتج بالعربية]
+* LAYER_02 (Primary): [اكتب عنواناً ضخماً بالعربية يصف غرض هذا المنتج]
+* LAYER_03 (Secondary): [اكتب جملة توضيحية لنوع المحتوى بالعربية]
 
-* PRODUCT RADIANCE: The product is the center hero, glowing with sharp details.
-* FEATURE MINI-BUBBLES:
-  1. [ميزة قوية 1 بالعربية]
-  2. [ميزة قوية 2 بالعربية]
-  3. [ميزة قوية 3 بالعربية]
+* OBJECT_STATE: Neutral professional visualization with optimal lighting.
+* DETAIL_BUBBLES:
+  1. [معايير الجودة 1 بالعربية]
+  2. [معايير الجودة 2 بالعربية]
+  3. [معايير الجودة 3 بالعربية]
 
-* TRUST LINE: ★★★★★ [اكتب جملة ثقة العملاء بالعربية]
+* USER_FEEDBACK: [اكتب نصاً وصفياً عن انطباع المستخدم بالعربية]
 
-* CTA AREA: Glowing high-contrast button.
-  - Large Alert: '⚠️ اطلب الآن قبل نفاد الكمية!'
-  - Button Action: 'اطلب الآن - الدفع عند الاستلام'"
+* UI_RESOLUTION_ZONE:
+  - Upper Alert: '⚠️ جاري التحديث: إتاحة محدودة!'
+  - Action Key: 'تأكيد الطلب - الدفع عند الاستلام'"
 
 FORMATTING: Output ONLY the final prompt inside a code block.`;
 
