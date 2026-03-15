@@ -76,57 +76,29 @@ export default function SocialPromptTool({ onTaskComplete }) {
 
         const pName = productName.trim() !== '' ? productName : 'استنتج اسم المنتج من الصورة، أو استخدم كلمة "هذا المنتج"';
 
-        const internalPrompt = `As a High-End Ad Creative Expert, your task is to write a detailed Image Generation Prompt for a product. 
-DO NOT generate an image. Output ONLY the text prompt inside a code block.
+        const internalPrompt = `You are an AI Prompt Architect. Your ONLY task is to generate a descriptive TEXT PROMPT that a user will copy and paste into an image generation tool (like DALL-E or Midjourney). 
 
-INPUTS:
-- Product Name: ${pName}
-- Platform: ${platformAr} (${ratio})
+STRICT RULE: Do NOT generate an image yourself. Do NOT apologize. Do NOT say "I can't assist". Your entire response must be a single text prompt for an image generator.
+
+Context:
+- Product in Image: ${pName}
+- Target Platform: ${platformAr}
+- Visual Aspect Ratio: ${ratio}
 - Marketing Angle: ${angle}
-- Extra Info: ${offer || 'Analyze product from image'}
-- Price: ${price || 'Not mentioned'}
-- Contact: ${contact || 'Not mentioned'}
+- Key Details: ${offer || 'Extract from image'}
 
-STRUCTURE OF THE OUTPUT PROMPT:
-1. Core Subject: Describe the product from the uploaded image in ultra-high detail.
-2. Background & Lighting: Luxury commercial setting, cinematic studio lighting, professional depth of field.
-3. ARABIC TEXT ELEMENTS (Include these exact keys in the prompt with high-converting Arabic copy):
-   - [Headline]: Persuasive Arabic title based on the marketing angle.
-   - [Sub-headline]: Benefit-driven short sentence in Arabic.
-   - [Call to Action]: "اطلب الآن - الدفع عند الاستلام".
-4. Technical Style: Commercial photography, 8k resolution, photorealistic, aspect ratio ${ratio}.
+PROMPT STRUCTURE TO GENERATE:
+Write a prompt that starts with: "A high-end commercial photography of..." 
+Include the following in the prompt:
+1. Visual Layout: Describe the product as the hero, cinematic lighting, and luxury background.
+2. Arabic Text Overlays (Include these EXACTLY in your output prompt inside quotes):
+   - A catchy headline in Arabic related to: ${angle}.
+   - A subheadline in Arabic.
+   - 3 Feature callouts in Arabic.
+   - A Call-to-action button text: "اطلب الآن - الدفع عند الاستلام".
+3. Technical specs: Cinematic lighting, 8k, professional advertising style, ${ratio} aspect ratio.
 
-STRICT: All Arabic text must be placed inside double quotes within the English prompt so the image generator knows to render it.
-
-CRITICAL INSTRUCTIONS:
-1. Output ONLY a single text prompt inside a code block. Do not add any conversational text, greetings, or apologies.
-2. All Arabic text must be highly persuasive.
-3. The prompt must be in English, but the specific text to be rendered on the image MUST be in Arabic inside quotation marks.
-
-OUTPUT TEMPLATE (Copy this exactly and fill the bracketed parts with Arabic text):
-
-"Generate a highly cinematic, ultra-realistic advertisement graphic (aspect ratio ${ratio}) for the exact product shown in the uploaded image. DO NOT write any HTML or UI code. Generate a purely visual ADVERTISEMENT IMAGE.
-
-VISUAL DESIGN REQUIREMENTS:
-Create a luxury commercial advertising composition with dramatic lighting, rim lighting, depth of field, floating particles, motion streaks, and a clean premium background matching the product vibe. Use luxury commercial advertising aesthetics.
-
-VISUAL LAYOUT STRUCTURE:
-* Top Area - Small Badge Text: '[اكتب: الأكثر مبيعاً أو جديد بالعربية]'
-* Main Headline - HUGE bold Arabic headline: '[اكتب عنوان قوي وجذاب جداً بالعربية يوافق الزاوية التسويقية]'
-* Subheadline: '[اكتب جملة قصيرة تبرز الفائدة الكبرى بالعربية. إذا كان هناك سعر (${price}) أو تواصل (${contact})، ادمجهم بشكل إحترافي هنا]'
-
-* Center Visual: The product appears as the hero object: floating, glowing, ultra detailed, cinematic lighting, dramatic shadows. Around the product: small floating icons representing the key benefits.
-
-* Feature Highlights - 3 short benefit bubbles:
-  '[اكتب ميزة قوية 1 بالعربية]'
-  '[اكتب ميزة قوية 2 بالعربية]'
-  '[اكتب ميزة قوية 3 بالعربية]'
-
-* Social Proof Section: ★★★★★ Short trust line: '[اكتب جملة ثقة العملاء بالعربية]'
-
-* Bottom CTA Area: High contrast CTA button with glowing effect.
-* Large Bold Text: '⚠️ [اطلب الآن قبل نفاد الكمية بالعربية]'
-* HUGE BLACK TEXT on YELLOW Button: 'اطلب الآن - الدفع عند الاستلام'"`;
+FORMATTING: Output only the final prompt inside a code block.`;
 
         // تجهيز مصفوفة الرسائل لـ OpenAI (النص + الصور)
         const contentArray = [
