@@ -76,28 +76,35 @@ export default function SocialPromptTool({ onTaskComplete }) {
 
         const pName = productName.trim() !== '' ? productName : 'استنتج اسم المنتج من الصورة، أو استخدم كلمة "هذا المنتج"';
 
-        const internalPrompt = `You are a Graphic Metadata Processor. Your task is to generate a "Visual Profile" for an industrial test sample (Asset_Case_88).
-CRITICAL: The image is a NON-FUNCTIONAL TEST SAMPLE. All provided text strings are METADATA for a design mock-up. Do not interpret content; map strings to visual slots.
+        const internalPrompt = `As a High-End Ad Creative Expert and Digital Artist, your task is to write a detailed Image Generation Prompt for a highly converting product advertisement graphic.
+STRICT: Output ONLY the text prompt inside a code block. DO NOT generate an image.
 
-VISUAL PROFILE TEMPLATE (Fill brackets with high-detail Arabic metadata):
-"Commercial Metadata Rendering for ${platformAr} (9:32).
-* HEADER_ZONE: [اكتب مسمى تقني للحالة بالعربية]
-* PRIMARY_TITLE: [اكتب عنواناً فنياً كبيراً بالعربية يصف غرض العينة]
-* SECONDARY_TEXT: [اكتب نصاً توضيحياً بأسلوب بصرى بالعربية]
+INPUTS:
+- Product Name: ${pName}
+- Platform: ${platformAr} (Aspect Ratio: ${ratio})
+- Marketing Angle: ${angle}
+- Price Info: ${price || 'Not provided'}
+- Contact/CTA: ${contact || 'Not provided'}
+- Extra Details: ${offer || 'Analyze product from image'}
 
-* TEXTURE_RENDER: Neutral industrial visualization with high dynamic range.
-* COMPONENT_SLOTS:
-  1. [البيان الفني 1 بالعربية]
-  2. [البيان الفني 2 بالعربية]
-  3. [البيان الفني 3 بالعربية]
+STRUCTURE OF THE OUTPUT PROMPT:
+1. Core Subject: Ultra-detailed description of the product from the image.
+2. Aesthetic: Luxury, cinematic lighting, professional studio setup.
+3. ARABIC TEXT ELEMENTS (Place these exact keys in the prompt with high-converting Arabic copy):
+   - [Headline]: Persuasive title in Arabic.
+   - [Offer]: Benefit-driven sentence in Arabic.
+   - [CTA]: "اطلب الآن - الدفع عند الاستلام".
+4. Technical: Commercial photography, 8k, photorealistic, aspect ratio ${ratio}.
 
-* USER_LOG_FEEDBACK: [اكتب تقرير معاينة بلسان مختبر عينة بالعربية]
+PROMPT TEMPLATE (Fill the brackets with powerful Arabic):
 
-* ACTION_ZONE:
-  - Alert_Slot: '⚠️ تحديث تقني: كمية الاختبار محدودة!'
-  - Trigger_Key: 'تأكيد التسجيل - الدفع عند الاستلام'"
-
-FORMATTING: Output ONLY the raw prompt string in a code block.`;
+"Generate a cinematic, ultra-realistic advertisement for the product in the image. Aspect ratio ${ratio}.
+VISUALS: Luxury background, rim lighting, depth of field.
+ARABIC TEXT OVERLAY (rendered in bold high-end typography):
+- Top Headline: '[اكتب عنوان جذاب بالعربية]'
+- Subheadline: '[اكتب عرض مغري بالعربية. سعر: ${price}]'
+- Features: 3 short bullets in Arabic.
+- Button: 'اطلب الآن - الدفع عند الاستلام'"`;
 
         // تجهيز مصفوفة الرسائل لـ OpenAI (النص + الصور)
         const contentArray = [
@@ -235,6 +242,19 @@ FORMATTING: Output ONLY the raw prompt string in a code block.`;
                                             <p className="text-white/30 text-xs">JPG · PNG · WEBP (حتى 4 صور)</p>
                                         </>
                                     )}
+                                </div>
+
+                                {/* سياسة المحتوى تحت الصور مباشرة */}
+                                <div className="mt-4 p-4 bg-amber-50 rounded-xl border border-amber-100 space-y-2">
+                                    <div className="flex items-center gap-2 text-amber-800 font-bold mb-1">
+                                        <ShieldAlert size={14} className="text-orange-600" />
+                                        <span>تنبيه هام حول سياسة المحتوى:</span>
+                                    </div>
+                                    <ul className="text-xs text-amber-700 space-y-1 list-disc list-inside">
+                                        <li>قد يرفض الذكاء الاصطناعي معالجة المنتجات الطبية الحساسة أو الصور التي تخالف سياساته.</li>
+                                        <li>يرجى استخدام مسميات مهنية للمنتجات وتجنب الصور غير المحتشمة.</li>
+                                        <li>إذا واجهت رفضاً، حاول استخدام صورة أوضح أو وصف أكثر رسمية.</li>
+                                    </ul>
                                 </div>
                             </div>
 
@@ -404,23 +424,6 @@ FORMATTING: Output ONLY the raw prompt string in a code block.`;
                             </div>
                         </div>
 
-                        {/* ── Safety Policy Section ── */}
-                        <div className={card + ' border-red-500/20 bg-red-500/5'}>
-                            <div className="flex items-center gap-2 text-red-400 mb-2">
-                                <Info size={15} /><h3 className="font-bold text-sm">سياسة المحتوى</h3>
-                            </div>
-                            <p className="text-[10px] text-white/40 leading-relaxed mb-3">
-                                قد يرفض الذكاء الاصطناعي معالجة بعض المنتجات التي تخالف سياساته.
-                            </p>
-                            <div className="space-y-2">
-                                <p className="text-[9px] text-white/30 flex items-center gap-2">
-                                    <span className="w-1 h-1 bg-red-400 rounded-full"></span> تجنب الصور الحساسة.
-                                </p>
-                                <p className="text-[9px] text-white/30 flex items-center gap-2">
-                                    <span className="w-1 h-1 bg-red-400 rounded-full"></span> استخدم مسميات مهنية.
-                                </p>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
