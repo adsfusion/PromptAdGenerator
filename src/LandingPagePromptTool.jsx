@@ -332,6 +332,60 @@ Use this EXACT comprehensive template, filling in the bracketed placeholders wit
                                 </div>
                             </div>
                         )}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="input-group">
+                                <label className="input-label">لغة المحتوى</label>
+                                <select
+                                    className="styled-input"
+                                    value={language}
+                                    onChange={(e) => setLanguage(e.target.value)}
+                                >
+                                    <option value="Arabic">العربية (للاسواق المحلية والخليج)</option>
+                                    <option value="English">الإنجليزية (للأسواق العالمية والدروبشيبينغ)</option>
+                                    <option value="French">الفرنسية (أسواق أفريقيا وأوروبا ناطقة بالفرنسية)</option>
+                                    <option value="Spanish">الإسبانية (لأسواق أمريكا اللاتينية وإسبانيا)</option>
+                                </select>
+                            </div>
+                            <div className="input-group">
+                                <label className="input-label">نمط الإخراج الفني</label>
+                                <select
+                                    className="styled-input"
+                                    value={outputStyle}
+                                    onChange={(e) => setOutputStyle(e.target.value)}
+                                >
+                                    <option value="Realistic / Cinematic">واقعي / سينمائي (احترافي)</option>
+                                    <option value="3D Isometric">ثلاثي الأبعاد (عصري)</option>
+                                    <option value="Minimalist / Clean">بسيط / هادئ (راقي)</option>
+                                    <option value="Vibrant / Flashy">مفعم بالحيوية / صارخ (جذاب)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="input-group">
+                                <label className="input-label">اسم المنتج (اختياري)</label>
+                                <input
+                                    type="text"
+                                    className="styled-input"
+                                    placeholder="مثال: كريم العناية الفائق"
+                                    value={productName}
+                                    onChange={(e) => setProductName(e.target.value)}
+                                />
+                            </div>
+                            <div className="input-group">
+                                <label className="input-label">الزاوية التسويقية</label>
+                                <select
+                                    className="styled-input"
+                                    value={marketingAngle}
+                                    onChange={(e) => setMarketingAngle(e.target.value)}
+                                >
+                                    <option value="Problem / Solution">مشكلة وحل (قوي)</option>
+                                    <option value="Luxury / Premium">فخامة وتميز</option>
+                                    <option value="Value for Money">القيمة مقابل السعر</option>
+                                    <option value="Ease of Use">سهولة الاستخدام</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
 
                     {/* ── Sidebar ── */}

@@ -26,6 +26,8 @@ export default function SocialPromptTool({ onTaskComplete }) {
     const [isGenerating, setIsGenerating] = useState(false);
     const [result, setResult] = useState('');
     const [copied, setCopied] = useState(false);
+    const [language, setLanguage] = useState('Arabic');
+    const [outputStyle, setOutputStyle] = useState('Realistic / Cinematic');
     const [error, setError] = useState('');
     const fileRef = useRef(null);
 
@@ -76,7 +78,21 @@ export default function SocialPromptTool({ onTaskComplete }) {
 
         const pName = productName.trim() !== '' ? productName : 'استنتج اسم المنتج من الصورة، أو استخدم كلمة "هذا المنتج"';
 
-        const internalPrompt = `As a High-End Ad Creative Expert and Digital Artist, your task is to write a detailed Image Generation Prompt for a highly converting product advertisement graphic.
+        const styleInstructions = {
+            'Realistic / Cinematic': 'Luxury commercial photography, high-end studio lighting, cinematic atmosphere, 8k resolution, photorealistic.',
+            '3D Isometric': 'Modern 3D isometric render, clean surfaces, soft shadows, vibrant colors, tech-focused aesthetic.',
+            'Minimalist / Clean': 'Extreme minimalist design, abundant negative space, elegant typography, simple color palette, professional look.',
+            'Vibrant / Flashy': 'High energy, bold gradients, dynamic movement, flashy lighting effects, high contrast, catchy visual elements.'
+        };
+
+        const languageInstructions = {
+            'Arabic': 'Write all textual elements in persuasive, high-quality Arabic (Local & Gulf dialects).',
+            'English': 'Write all textual elements in persuasive, high-quality English (Global & Dropshipping style).',
+            'French': 'Write all textual elements in persuasive, high-quality French (European & African French style).',
+            'Spanish': 'Write all textual elements in persuasive, high-quality Spanish (Latin American & Spain style).'
+        };
+
+        const internalPrompt = `As a world-class AI Prompt Engineer and Multi-language Ad Creative Expert, your task is to write a detailed Image Generation Prompt for a highly converting product advertisement graphic.
 STRICT: Output ONLY the text prompt inside a code block. DO NOT generate an image.
 
 INPUTS:
@@ -86,25 +102,30 @@ INPUTS:
 - Price Info: ${price || 'Not provided'}
 - Contact/CTA: ${contact || 'Not provided'}
 - Extra Details: ${offer || 'Analyze product from image'}
+- Target Language: ${language}
+- Aesthetic Style: ${outputStyle}
+
+LANGUAGE RULE: ${languageInstructions[language] || languageInstructions['Arabic']}
+AESTHETIC RULE: ${styleInstructions[outputStyle] || styleInstructions['Realistic / Cinematic']}
 
 STRUCTURE OF THE OUTPUT PROMPT:
 1. Core Subject: Ultra-detailed description of the product from the image.
-2. Aesthetic: Luxury, cinematic lighting, professional studio setup.
-3. ARABIC TEXT ELEMENTS (Place these exact keys in the prompt with high-converting Arabic copy):
-   - [Headline]: Persuasive title in Arabic.
-   - [Offer]: Benefit-driven sentence in Arabic.
-   - [CTA]: "اطلب الآن - الدفع عند الاستلام".
-4. Technical: Commercial photography, 8k, photorealistic, aspect ratio ${ratio}.
+2. Aesthetic: ${styleInstructions[outputStyle]}
+3. TARGET LANGUAGE TEXT ELEMENTS (Place these keys in the prompt with high-converting copy in ${language}):
+   - [Headline]: Persuasive title.
+   - [Offer]: Benefit-driven sentence.
+   - [CTA]: "اطلب الآن - الدفع عند الاستلام" (Translate this to ${language} if not Arabic).
+4. Technical: Commercial photography style, 8k, photorealistic, aspect ratio ${ratio}.
 
-PROMPT TEMPLATE (Fill the brackets with powerful Arabic):
+PROMPT TEMPLATE (Fill the brackets with powerful copy in ${language}):
 
-"Generate a cinematic, ultra-realistic advertisement for the product in the image. Aspect ratio ${ratio}.
-VISUALS: Luxury background, rim lighting, depth of field.
-ARABIC TEXT OVERLAY (rendered in bold high-end typography):
-- Top Headline: '[اكتب عنوان جذاب بالعربية]'
-- Subheadline: '[اكتب عرض مغري بالعربية. سعر: ${price}]'
-- Features: 3 short bullets in Arabic.
-- Button: 'اطلب الآن - الدفع عند الاستلام'"`;
+"Generate a cinematic, high-end advertisement for the product in the image. Aspect ratio ${ratio}.
+VISUAL STYLE: ${styleInstructions[outputStyle]}
+TEXT OVERLAY IN ${language.toUpperCase()} (rendered in bold high-end typography):
+- Top Headline: '[Write a catchy headline]'
+- Subheadline: '[Write a persuasive offer. Price: ${price}]'
+- Features: 3 short bullets.
+- Button: '[CTA text - Order Now]'"`;
 
         // تجهيز مصفوفة الرسائل لـ OpenAI (النص + الصور)
         const contentArray = [
@@ -275,6 +296,38 @@ ARABIC TEXT OVERLAY (rendered in bold high-end typography):
                                             <p className="text-[10px] mt-1 opacity-60">{p.ratio}</p>
                                         </button>
                                     ))}
+                                </div>
+                            </div>
+
+                            {/* Language and Style Selection */}
+                            <div className="grid md:grid-cols-2 gap-5">
+                                <div>
+                                    <p className={lbl}><Share2 size={13} className="text-purple-400" />لغة المحتوى</p>
+                                    <select
+                                        className={sel}
+                                        value={language}
+                                        onChange={(e) => setLanguage(e.target.value)}
+                                        disabled={currentStep === 'loading'}
+                                    >
+                                        <option value="Arabic">العربية (للاسواق المحلية والخليج)</option>
+                                        <option value="English">الإنجليزية (للأسواق العالمية والدروبشيبينغ)</option>
+                                        <option value="French">الفرنسية (أسواق أفريقيا وأوروبا ناطقة بالفرنسية)</option>
+                                        <option value="Spanish">الإسبانية (لأسواق أمريكا اللاتينية وإسبانيا)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <p className={lbl}><Wand2 size={13} className="text-purple-400" />نمط الإخراج الفني</p>
+                                    <select
+                                        className={sel}
+                                        value={outputStyle}
+                                        onChange={(e) => setOutputStyle(e.target.value)}
+                                        disabled={currentStep === 'loading'}
+                                    >
+                                        <option value="Realistic / Cinematic">واقعي / سينمائي (احترافي)</option>
+                                        <option value="3D Isometric">ثلاثي الأبعاد (عصري)</option>
+                                        <option value="Minimalist / Clean">بسيط / هادئ (راقي)</option>
+                                        <option value="Vibrant / Flashy">مفعم بالحيوية / صارخ (جذاب)</option>
+                                    </select>
                                 </div>
                             </div>
 
