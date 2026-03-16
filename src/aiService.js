@@ -77,13 +77,13 @@ async function callOpenAI(systemPrompt, userPrompt, imageBase64) {
 async function callGemini(systemPrompt, userPrompt, imageBase64) {
     if (!genAI) throw new Error("Gemini API Key is missing");
 
-    const model = genAI.getGenerativeModel({ 
-        model: "gemini-2.0-flash",
+    const model = genAI.getGenerativeModel({
+        model: "gemini-2.5-flash",
         systemInstruction: systemPrompt
     });
 
     const promptParts = [userPrompt];
-    
+
     if (imageBase64) {
         // Extract base64 part and mime type
         const matches = imageBase64.match(/^data:([a-zA-Z0-9]+\/[a-zA-Z0-9-.+]+);base64,(.+)$/);
