@@ -16,6 +16,8 @@ export default function SocialPromptTool() {
     const [images, setImages]           = useState([]);
     const [productName, setProductName] = useState('');
     const [offer, setOffer]             = useState('');
+    const [price, setPrice]             = useState('');
+    const [contact, setContact]         = useState('');
     const [angle, setAngle]             = useState('مشكلة وحل');
     const [platform, setPlatform]       = useState('Instagram');
     const [isGenerating, setIsGenerating] = useState(false);
@@ -59,7 +61,8 @@ export default function SocialPromptTool() {
         // التعديل الذكي هنا: معالجة حالة ترك اسم المنتج فارغاً
         const pName = productName.trim() !== '' ? productName : 'استنتج اسم المنتج من الصورة، أو استخدم كلمة "هذا المنتج"';
 
-        const internalPrompt = `You are a world-class AI Prompt Engineer and Arabic Direct Response Copywriter. Analyze the attached image and inputs (Platform: ${platform} (${platformAr}), Product: ${pName}, Offer: ${offer || 'من الصورة'}, Angle: ${angle}).
+        const internalPrompt = `Step 1: Objectively describe the product in the image (packaging, primary text, and colors).
+Step 2: Based on this evidence, act as a world-class AI Prompt Engineer and Arabic Direct Response Copywriter. Analyze the inputs (Platform: ${platform} (${platformAr}), Product: ${pName}, Offer: ${offer || 'من الصورة'}, Angle: ${angle}, Price: ${price}, Contact: ${contact}).
 
 YOUR ONLY TASK IS TO OUTPUT A SINGLE DESIGN PROMPT FOR THE IMAGE GENERATOR SOFTWARE "NANO BANANA PRO". DO NOT OUTPUT CONVERSATIONAL TEXT OR EXPLANATIONS.
 
@@ -73,6 +76,8 @@ Output the text inside a single code block. Use this EXACT template:
 
 * HUGE BOLD TEXT AT THE TOP: '[اكتب خطاف/عنوان قوي جداً بالعربية يوافق الزاوية التسويقية]'
 * Medium Text highlighting a key benefit: '[اكتب فائدة رئيسية واضحة بالعربية]'
+${price ? `* Visible Price: '${price}'` : ''}
+${contact ? `* Contact/WhatsApp: '${contact}'` : ''}
 * Prominent CTA Button at the bottom: 'اطلب الآن'
 
 (Ensure all Arabic text is highly persuasive, matches the product and angle, and is placed ONLY inside the quotation marks)."`;
@@ -110,6 +115,12 @@ Output the text inside a single code block. Use this EXACT template:
             const data = await response.json();
             let finalOutput = data.choices[0]?.message?.content || '';
             
+            // Refusal detection - log full text to console
+            if (finalOutput.length < 200 && (finalOutput.toLowerCase().includes("i'm sorry") || finalOutput.toLowerCase().includes("can't help") || finalOutput.toLowerCase().includes("cannot assist"))) {
+                console.warn("OpenAI Refusal Detected:", finalOutput);
+                throw new Error("اعتذر الذكاء الاصطناعي عن معالجة هذا الطلب بسبب سياسات المحتوى. يرجى تجربة استخدام اسم منتج أقل حساسية.");
+            }
+
             // Clean up code blocks if present
             finalOutput = finalOutput.replace(/```[a-zA-Z]*\n?/g, '').replace(/```$/g, '').trim();
 
@@ -126,6 +137,19 @@ Output the text inside a single code block. Use this EXACT template:
         navigator.clipboard.writeText(result);
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
+    };
+
+    const handleReset = () => {
+        setImages([]);
+        setProductName('');
+        setOffer('');
+        setPrice('');
+        setContact('');
+        setAngle('مشكلة وحل');
+        setPlatform('Instagram');
+        setResult('');
+        setError('');
+        if (fileRef.current) fileRef.current.value = '';
     };
 
     // ── shared classes ────────────────────────────────────────
@@ -231,6 +255,14 @@ Output the text inside a single code block. Use this EXACT template:
                                         <option>فائدة وظيفية</option>
                                     </select>
                                 </div>
+                                <div>
+                                    <p className={lbl}><Sparkles size={13} className="text-purple-400" />السعر <span className="text-white/30 font-normal">(اختياري)</span></p>
+                                    <input type="text" value={price} onChange={e => setPrice(e.target.value)} placeholder="مثال: 199 ريال" className={inp} />
+                                </div>
+                                <div>
+                                    <p className={lbl}><Target size={13} className="text-purple-400" />رقم التواصل <span className="text-white/30 font-normal">(اختياري)</span></p>
+                                    <input type="text" value={contact} onChange={e => setContact(e.target.value)} placeholder="مثال: عبر الواتساب" className={inp} />
+                                </div>
                                 <div className="md:col-span-2">
                                     <p className={lbl}><Wand2 size={13} className="text-purple-400" />وصف العرض / المميزات <span className="text-white/30 font-normal">(اختياري)</span></p>
                                     <textarea value={offer} onChange={e => setOffer(e.target.value)} rows={3} placeholder="مثال: يزيل البقع في 7 أيام، مكونات طبيعية..." className={inp + ' resize-none'} />
@@ -246,6 +278,13 @@ Output the text inside a single code block. Use this EXACT template:
                                 {isGenerating
                                     ? <><span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />جاري التوليد...</>
                                     : <><Sparkles size={18} />توليد برومبت {currentPlatform.label} ({currentPlatform.ratio})</>}
+                            </button>
+
+                            <button
+                                onClick={handleReset}
+                                className="w-full py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl font-bold text-white/70 flex items-center justify-center gap-2 text-xs transition-all"
+                            >
+                                <Zap size={14} /> تجربة منتج آخر
                             </button>
                         </div>
 

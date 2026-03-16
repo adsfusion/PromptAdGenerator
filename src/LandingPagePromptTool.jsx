@@ -10,6 +10,8 @@ export default function LandingPagePromptTool() {
     const [images, setImages] = useState([]);
     const [productName, setProductName] = useState('');
     const [offerDescription, setOfferDescription] = useState('');
+    const [price, setPrice] = useState('');
+    const [contact, setContact] = useState('');
     const [marketingAngle, setMarketingAngle] = useState('مشكلة وحل');
     const [isGenerating, setIsGenerating] = useState(false);
     const [result, setResult] = useState('');
@@ -46,7 +48,8 @@ export default function LandingPagePromptTool() {
 
         const pName = productName.trim() !== '' ? productName : 'استنتج اسم المنتج من الصورة، أو استخدم كلمة "هذا المنتج"';
 
-        const internalPrompt = `You are a world-class AI Prompt Engineer and Arabic Direct Response Copywriter. Analyze the attached product image and inputs (Product: ${pName}, Offer: ${offerDescription}, Angle: ${marketingAngle}).
+        const internalPrompt = `Step 1: Objectively describe the visual attributes of the product in the image (packaging shape, colors, and the text written on the label).
+Step 2: Based on the visual evidence, act as a world-class AI Prompt Engineer and Arabic Direct Response Copywriter. Analyze the inputs (Product: ${pName}, Offer: ${offerDescription}, Angle: ${marketingAngle}, Price: ${price}, Contact: ${contact}).
 
 YOUR ONLY TASK IS TO OUTPUT A SINGLE, READY-TO-COPY DESIGN PROMPT FOR THE IMAGE GENERATOR SOFTWARE "NANO BANANA PRO". 
 
@@ -84,6 +87,8 @@ Use this EXACT comprehensive template, filling in the bracketed placeholders wit
 * Medium Black Text: '[مراجعة إيجابية قصيرة بلسان زبون بالعربية]'
 
 * Solid, high-contrast footer. Product prominent next to CTA button.
+${price ? `* High Visibility Price Tag: '${price}'` : ''}
+${contact ? `* Contact Info / WhatsApp: '${contact}'` : ''}
 * Large White Bold Text: '⚠️ الكمية المتاحة محدودة جداً، اطلب الآن!'
 * HUGE BLACK TEXT on YELLOW Button: 'اطلب الآن - الدفع عند الاستلام'"`;
 
@@ -120,6 +125,12 @@ Use this EXACT comprehensive template, filling in the bracketed placeholders wit
             const data = await response.json();
             let finalOutput = data.choices[0]?.message?.content || '';
             
+            // Refusal detection - log full text to console
+            if (finalOutput.length < 200 && (finalOutput.toLowerCase().includes("i'm sorry") || finalOutput.toLowerCase().includes("can't help") || finalOutput.toLowerCase().includes("cannot assist"))) {
+                console.warn("OpenAI Refusal Detected:", finalOutput);
+                throw new Error("اعتذر الذكاء الاصطناعي عن معالجة هذا الطلب بسبب سياسات المحتوى (غالبًا بسبب كلمات مثل 'Treatment' أو 'Prostate'). يرجى تجربة وصف المنتج بكلمات عامة.");
+            }
+
             // Clean up code blocks if present
             finalOutput = finalOutput.replace(/```[a-zA-Z]*\n?/g, '').replace(/```$/g, '').trim();
 
@@ -136,6 +147,18 @@ Use this EXACT comprehensive template, filling in the bracketed placeholders wit
         navigator.clipboard.writeText(result);
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
+    };
+
+    const handleReset = () => {
+        setImages([]);
+        setProductName('');
+        setOfferDescription('');
+        setPrice('');
+        setContact('');
+        setMarketingAngle('مشكلة وحل');
+        setResult('');
+        setError('');
+        if (fileRef.current) fileRef.current.value = '';
     };
 
     // ── shared classes ────────────────────────────────────────
@@ -222,6 +245,14 @@ Use this EXACT comprehensive template, filling in the bracketed placeholders wit
                                         <option>فائدة وظيفية</option>
                                     </select>
                                 </div>
+                                <div>
+                                    <p className={lbl}><Sparkles size={13} className="text-purple-400" />السعر <span className="text-white/30 font-normal">(اختياري)</span></p>
+                                    <input type="text" value={price} onChange={e => setPrice(e.target.value)} placeholder="مثال: 299 ريال" className={inp} />
+                                </div>
+                                <div>
+                                    <p className={lbl}><Target size={13} className="text-purple-400" />رقم التواصل <span className="text-white/30 font-normal">(اختياري)</span></p>
+                                    <input type="text" value={contact} onChange={e => setContact(e.target.value)} placeholder="مثال: 05XXXXXXXX" className={inp} />
+                                </div>
                                 <div className="md:col-span-2">
                                     <p className={lbl}><Wand2 size={13} className="text-purple-400" />وصف العرض / المميزات <span className="text-white/30 font-normal">(اختياري)</span></p>
                                     <textarea value={offerDescription} onChange={e => setOfferDescription(e.target.value)} rows={3} placeholder="مثال: يحل مشكلة التجعد، بمكونات طبيعية 100%..." className={inp + ' resize-none'} />
@@ -237,6 +268,13 @@ Use this EXACT comprehensive template, filling in the bracketed placeholders wit
                                 {isGenerating
                                     ? <><span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />جاري التوليد...</>
                                     : <><Sparkles size={18} />توليد برومبت Nano Banana Pro</>}
+                            </button>
+
+                            <button
+                                onClick={handleReset}
+                                className="w-full py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl font-bold text-white/70 flex items-center justify-center gap-2 text-xs transition-all"
+                            >
+                                <Zap size={14} /> تجربة منتج آخر
                             </button>
                         </div>
 
