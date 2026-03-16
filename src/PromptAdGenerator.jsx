@@ -99,6 +99,11 @@ export default function PromptAdGenerator({ onTaskComplete }) {
 
         const getAngleName = (a) => {
             switch (a) {
+                case 'problem_solution': return 'مشكلة وحل';
+                case 'direct_response': return 'استجابة مباشرة';
+                case 'social_proof': return 'دليل اجتماعي';
+                case 'limited_offer': return 'عرض محدود بوقت';
+                case 'functional_benefit': return 'فائدة وظيفية';
                 case 'curiosity': return 'إثارة الفضول (Curiosity / Hook)';
                 case 'discount': return 'التركيز على الخصم (Discount / Promotion)';
                 case 'problem': return 'حل مشكلة (Problem / Solution)';
@@ -374,7 +379,9 @@ Final Response Format:
                         {/* Pricing and Offers */}
                         <div className="bg-slate-900/40 border border-slate-800 rounded-xl p-6">
                             <h3 className="mb-4 text-sm font-semibold text-foreground flex items-center justify-between">
-                                التسعير والعروض (اختياري)
+                                {language === 'arabic' ? 'التسعير والعروض (اختياري)' : 
+                                 language === 'english' ? 'Pricing & Offers (Optional)' :
+                                 language === 'french' ? 'Prix et Offres (Optionnel)' : 'Precios y Ofertas (Opcional)'}
                                 <label className="relative inline-flex items-center cursor-pointer">
                                     <input
                                         type="checkbox"
@@ -384,7 +391,11 @@ Final Response Format:
                                         disabled={currentStep === 'loading'}
                                     />
                                     <div className="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:right-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
-                                    <span className="mr-3 text-xs font-medium text-slate-300">عرض حصري / يوجد خصم</span>
+                                    <span className="mr-3 text-xs font-medium text-slate-300">
+                                        {language === 'arabic' ? 'عرض حصري / يوجد خصم' : 
+                                         language === 'english' ? 'Exclusive Offer / Discount' :
+                                         language === 'french' ? 'Offre Exclusive / Remise' : 'Oferta Exclusiva / Descuento'}
+                                    </span>
                                 </label>
                             </h3>
 
@@ -392,14 +403,14 @@ Final Response Format:
 
                                 {!hasDiscount ? (
                                     <div className="col-span-full">
-                                        <label className="mb-2 block text-xs font-semibold text-slate-400">السعر الحالي</label>
+                                        <label className="mb-2 block text-xs font-semibold text-slate-400">{getUIText(language).price}</label>
                                         <div className="flex gap-2">
                                             <input
                                                 type="number"
                                                 value={currentPrice}
                                                 onChange={(e) => setCurrentPrice(e.target.value)}
                                                 disabled={currentStep === 'loading'}
-                                                placeholder="مثال: 99"
+                                                placeholder={getUIText(language).placeholder}
                                                 className="flex-1 bg-slate-800 border-none rounded-lg px-4 py-3 text-slate-200 focus:ring-2 focus:ring-purple-500 appearance-none outline-none disabled:opacity-50"
                                             />
                                             <select
@@ -408,39 +419,34 @@ Final Response Format:
                                                 disabled={currentStep === 'loading'}
                                                 className="w-24 bg-slate-800 border-none rounded-lg px-2 py-3 text-slate-200 focus:ring-2 focus:ring-purple-500 appearance-none outline-none text-center disabled:opacity-50"
                                             >
-                                                <option value="دولار $">دولار $</option>
-                                                <option value="ريال">ريال</option>
-                                                <option value="درهم">درهم</option>
-                                                <option value="جنيه">جنيه</option>
-                                                <option value="دينار">دينار</option>
-                                                <option value="يورو €">يورو €</option>
+                                                {getCurrencies(language).map(c => <option key={c} value={c}>{c}</option>)}
                                             </select>
                                         </div>
                                     </div>
                                 ) : (
                                     <>
                                         <div>
-                                            <label className="mb-2 block text-xs font-semibold text-slate-400">السعر الأصلي</label>
+                                            <label className="mb-2 block text-xs font-semibold text-slate-400">{getUIText(language).original}</label>
                                             <div className="flex gap-2">
                                                 <input
                                                     type="number"
                                                     value={originalPrice}
                                                     onChange={(e) => setOriginalPrice(e.target.value)}
                                                     disabled={currentStep === 'loading'}
-                                                    placeholder="مثال: 150"
+                                                    placeholder={getUIText(language).placeholder}
                                                     className="flex-1 bg-slate-800 border-none rounded-lg px-4 py-3 text-slate-200 focus:ring-2 focus:ring-purple-500 appearance-none outline-none disabled:opacity-50"
                                                 />
                                             </div>
                                         </div>
                                         <div>
-                                            <label className="mb-2 block text-xs font-semibold text-slate-400">السعر بعد الخصم</label>
+                                            <label className="mb-2 block text-xs font-semibold text-slate-400">{getUIText(language).discount}</label>
                                             <div className="flex gap-2">
                                                 <input
                                                     type="number"
                                                     value={discountedPrice}
                                                     onChange={(e) => setDiscountedPrice(e.target.value)}
                                                     disabled={currentStep === 'loading'}
-                                                    placeholder="مثال: 99"
+                                                    placeholder={getUIText(language).placeholder}
                                                     className="flex-1 bg-slate-800 border-none rounded-lg px-4 py-3 text-slate-200 focus:ring-2 focus:ring-purple-500 appearance-none outline-none disabled:opacity-50"
                                                 />
                                                 <select
@@ -449,12 +455,7 @@ Final Response Format:
                                                     disabled={currentStep === 'loading'}
                                                     className="w-24 bg-slate-800 border-none rounded-lg px-2 py-3 text-slate-200 focus:ring-2 focus:ring-purple-500 appearance-none outline-none text-center disabled:opacity-50"
                                                 >
-                                                    <option value="دولار $">دولار $</option>
-                                                    <option value="ريال">ريال</option>
-                                                    <option value="درهم">درهم</option>
-                                                    <option value="جنيه">جنيه</option>
-                                                    <option value="دينار">دينار</option>
-                                                    <option value="يورو €">يورو €</option>
+                                                    {getCurrencies(language).map(c => <option key={c} value={c}>{c}</option>)}
                                                 </select>
                                             </div>
                                         </div>
@@ -463,14 +464,14 @@ Final Response Format:
                                 
                                 <div className="col-span-full mt-2">
                                     <label className="mb-2 block text-xs font-semibold text-slate-400 flex items-center gap-2">
-                                        رقم التواصل / واتساب (اختياري)
+                                        {getUIText(language).contact}
                                     </label>
                                     <input
                                         type="text"
                                         value={contact}
                                         onChange={(e) => setContact(e.target.value)}
                                         disabled={currentStep === 'loading'}
-                                        placeholder="مثال: +212600000000"
+                                        placeholder={language === 'arabic' ? 'مثال: +212600000000' : 'e.g. +212600000000'}
                                         className="w-full bg-slate-800 border-none rounded-lg px-4 py-3 text-slate-200 focus:ring-2 focus:ring-purple-500 appearance-none outline-none disabled:opacity-50"
                                     />
                                 </div>

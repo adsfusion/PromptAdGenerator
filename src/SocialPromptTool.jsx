@@ -54,6 +54,25 @@ export default function SocialPromptTool() {
 
     const removeImg = i => setImages(prev => prev.filter((_, idx) => idx !== i));
 
+    const getCurrencies = (lang) => {
+        const l = lang.toLowerCase();
+        if (l === 'english') return ['Dollar $', 'Riyal', 'Dirham', 'Pound', 'Dinar', 'Euro €'];
+        if (l === 'french') return ['Dollar $', 'Riyal', 'Dirham', 'Livre', 'Dinar', 'Euro €'];
+        if (l === 'spanish') return ['Dólar $', 'Riyal', 'Dirham', 'Libra', 'Dinar', 'Euro €'];
+        return ['دولار $', 'ريال', 'درهم', 'جنيه', 'دينار', 'يورو €'];
+    };
+
+    const getUIText = (lang) => {
+        const l = lang.toLowerCase();
+        const texts = {
+            arabic: { pricing: 'التسعير والعروض (اختياري)', hasDiscount: 'يوجد خصم', price: 'السعر الحالي', original: 'السعر الأصلي', discount: 'السعر بعد الخصم', currency: 'العملة', placeholder: 'مثال: 99' },
+            english: { pricing: 'Pricing & Offers (Optional)', hasDiscount: 'Has Discount', price: 'Current Price', original: 'Original Price', discount: 'Discounted Price', currency: 'Currency', placeholder: 'e.g. 99' },
+            french: { pricing: 'Prix et Offres (Optionnel)', hasDiscount: 'Avec Remise', price: 'Prix Actuel', original: 'Prix Original', discount: 'Prix avec Remise', currency: 'Devise', placeholder: 'ex: 99' },
+            spanish: { pricing: 'Precios y Ofertas (Opcional)', hasDiscount: 'Con Descuento', price: 'Precio Actual', original: 'Precio Original', discount: 'Precio de Descuento', currency: 'Moneda', placeholder: 'ej: 99' }
+        };
+        return texts[l] || texts.arabic;
+    };
+
     // ── generation ───────────────────────────────────────────
     const handleGenerate = async () => {
         if (!images.length) { setError('يرجى رفع صورة المنتج أولاً.'); return; }
@@ -306,7 +325,9 @@ ${contact ? `* Contact/WhatsApp: '${contact}'` : ''}
                                 <div className="md:col-span-2 bg-white/5 border border-white/10 rounded-2xl p-5 mt-2">
                                     <div className="flex items-center justify-between mb-4">
                                         <p className="text-xs font-bold text-purple-400 flex items-center gap-2">
-                                            <Sparkles size={13} />التسعير والعروض (اختياري)
+                                            <div className="flex items-center gap-2">
+                                                <Sparkles size={13} />{getUIText(language).pricing}
+                                            </div>
                                         </p>
                                         <label className="relative inline-flex items-center cursor-pointer">
                                             <input
@@ -316,7 +337,7 @@ ${contact ? `* Contact/WhatsApp: '${contact}'` : ''}
                                                 onChange={() => setHasDiscount(!hasDiscount)}
                                             />
                                             <div className="w-10 h-5 bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:right-[2px] after:bg-white/40 after:border-white/10 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-purple-600"></div>
-                                            <span className="mr-3 text-[10px] font-medium text-white/40">يوجد خصم</span>
+                                            <span className="mr-3 text-[10px] font-medium text-white/40">{getUIText(language).hasDiscount}</span>
                                         </label>
                                     </div>
 
@@ -324,31 +345,31 @@ ${contact ? `* Contact/WhatsApp: '${contact}'` : ''}
                                         {!hasDiscount ? (
                                             <div className="col-span-full flex gap-3">
                                                 <div className="flex-1">
-                                                    <p className="text-[10px] text-white/30 mb-1.5 mr-1">السعر الحالي</p>
-                                                    <input type="number" value={currentPrice} onChange={e => setCurrentPrice(e.target.value)} placeholder="مثال: 99" className={inp} />
+                                                    <p className="text-[10px] text-white/30 mb-1.5 mr-1">{getUIText(language).price}</p>
+                                                    <input type="number" value={currentPrice} onChange={e => setCurrentPrice(e.target.value)} placeholder={getUIText(language).placeholder} className={inp} />
                                                 </div>
                                                 <div className="w-24">
-                                                    <p className="text-[10px] text-white/30 mb-1.5 mr-1">العملة</p>
+                                                    <p className="text-[10px] text-white/30 mb-1.5 mr-1">{getUIText(language).currency}</p>
                                                     <select value={currency} onChange={e => setCurrency(e.target.value)} className={sel}>
-                                                        {['دولار $', 'ريال', 'درهم', 'جنيه', 'دينار', 'يورو €'].map(c => <option key={c} value={c}>{c}</option>)}
+                                                        {getCurrencies(language).map(c => <option key={c} value={c}>{c}</option>)}
                                                     </select>
                                                 </div>
                                             </div>
                                         ) : (
                                             <>
                                                 <div>
-                                                    <p className="text-[10px] text-white/30 mb-1.5 mr-1">السعر الأصلي</p>
-                                                    <input type="number" value={originalPrice} onChange={e => setOriginalPrice(e.target.value)} placeholder="مثال: 150" className={inp} />
+                                                    <p className="text-[10px] text-white/30 mb-1.5 mr-1">{getUIText(language).original}</p>
+                                                    <input type="number" value={originalPrice} onChange={e => setOriginalPrice(e.target.value)} placeholder={getUIText(language).placeholder} className={inp} />
                                                 </div>
                                                 <div className="flex gap-3">
                                                     <div className="flex-1">
-                                                        <p className="text-[10px] text-white/30 mb-1.5 mr-1">السعر بعد الخصم</p>
-                                                        <input type="number" value={discountedPrice} onChange={e => setDiscountedPrice(e.target.value)} placeholder="مثال: 99" className={inp} />
+                                                        <p className="text-[10px] text-white/30 mb-1.5 mr-1">{getUIText(language).discount}</p>
+                                                        <input type="number" value={discountedPrice} onChange={e => setDiscountedPrice(e.target.value)} placeholder={getUIText(language).placeholder} className={inp} />
                                                     </div>
                                                     <div className="w-24">
-                                                        <p className="text-[10px] text-white/30 mb-1.5 mr-1">العملة</p>
+                                                        <p className="text-[10px] text-white/30 mb-1.5 mr-1">{getUIText(language).currency}</p>
                                                         <select value={currency} onChange={e => setCurrency(e.target.value)} className={sel}>
-                                                            {['دولار $', 'ريال', 'درهم', 'جنيه', 'دينار', 'يورو €'].map(c => <option key={c} value={c}>{c}</option>)}
+                                                            {getCurrencies(language).map(c => <option key={c} value={c}>{c}</option>)}
                                                         </select>
                                                     </div>
                                                 </div>
