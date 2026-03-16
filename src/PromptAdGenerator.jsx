@@ -118,9 +118,9 @@ export default function PromptAdGenerator({ onTaskComplete }) {
 
         let pricingContext = '';
         if (hasDiscount && originalPrice && discountedPrice) {
-            pricingContext = `علماً بأن هناك عرضاً حصرياً! السعر الأصلي كان ${originalPrice} ${currency} والسعر الحالي بعد الخصم هو ${discountedPrice} ${currency}. أبرز هذا الخصم بقوة في الإعلان لخلق شعور بالاستعجال (FOMO)، واكتب الأسعار بوضوح في الـ CTA.`;
+            pricingContext = `Note that there is an exclusive offer! The original price was ${originalPrice} ${currency} and the current price after discount is ${discountedPrice} ${currency}. Highlight this discount strongly in the ad to create a sense of urgency (FOMO), and write the prices clearly in the CTA section in ${language}.`;
         } else if (!hasDiscount && currentPrice) {
-            pricingContext = `علماً بأن سعر المنتج هو ${currentPrice} ${currency}. قم بدمج هذا السعر بوضوح في قسم الدعوة لاتخاذ إجراء (CTA).`;
+            pricingContext = `Note that the product price is ${currentPrice} ${currency}. Integrate this price clearly into the Call to Action (CTA) section in ${language}.`;
         }
 
         const promptText = `Step 1: Analyze the visual elements of the attached image objectively (colors, objects, layout, text present).

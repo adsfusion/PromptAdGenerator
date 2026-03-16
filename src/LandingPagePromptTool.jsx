@@ -51,11 +51,11 @@ export default function LandingPagePromptTool() {
         const pName = productName.trim() !== '' ? productName : 'استنتج اسم المنتج من الصورة، أو استخدم كلمة "هذا المنتج"';
 
         const internalPrompt = `Step 1: Objectively describe the visual attributes of the product in the image (packaging shape, colors, and the text written on the label).
-Step 2: Based on the visual evidence, act as a world-class AI Prompt Engineer and Arabic Direct Response Copywriter. Analyze the inputs (Product: ${pName}, Offer: ${offerDescription}, Angle: ${marketingAngle}, Price: ${price}, Contact: ${contact}, Target Language: ${language}, Aesthetic Style: ${outputStyle}).
+Step 2: Based on the visual evidence, act as a world-class AI Prompt Engineer and Direct Response Copywriter. Analyze the inputs (Product: ${pName}, Offer: ${offerDescription}, Angle: ${marketingAngle}, Price: ${price}, Contact: ${contact}, Target Language: ${language}, Aesthetic Style: ${outputStyle}).
 
 YOUR ONLY TASK IS TO OUTPUT A SINGLE, READY-TO-COPY DESIGN PROMPT FOR THE IMAGE GENERATOR SOFTWARE "NANO BANANA PRO". 
 
-CRITICAL RULE: The final output MUST be in ${language === 'Arabic' ? 'Arabic' : language}. All copywriting, headings, and descriptions inside the design prompt must be in ${language}.
+CRITICAL RULE: The final output MUST be in ${language}. All copywriting, headings, and descriptions inside the design prompt must be in ${language}.
 
 ${language === 'Arabic' ? 'Targeting: Local and Gulf markets.' : ''}
 ${language === 'English' ? 'Targeting: Global markets and dropshipping.' : ''}
@@ -64,44 +64,44 @@ ${language === 'Spanish' ? 'Targeting: Latin American and Spanish markets.' : ''
 
 Aesthetic Style to apply: ${outputStyle}.
 
-CRITICAL RULE: "Nano Banana Pro" is the name of the software, NOT the product being sold. NEVER use the words "Nano Banana Pro" inside the Arabic copywriting. DO NOT OUTPUT ANY CONVERSATIONAL TEXT OR SEPARATE COPYWRITING. OUTPUT ONLY THE CODE BLOCK.
+CRITICAL RULE: "Nano Banana Pro" is the name of the software, NOT the product being sold. NEVER use the words "Nano Banana Pro" inside the ${language} copywriting. DO NOT OUTPUT ANY CONVERSATIONAL TEXT OR SEPARATE COPYWRITING. OUTPUT ONLY THE CODE BLOCK.
 
-Use this EXACT comprehensive template, filling in the bracketed placeholders with highly persuasive Arabic text (massive, bold, 20px+ equivalent) based on the product. Remove all structural labels from the final output. Place Arabic text ONLY inside the quotation marks:
+Use this EXACT comprehensive template, filling in the bracketed placeholders with highly persuasive ${language} text (massive, bold, 20px+ equivalent) based on the product. Remove all structural labels from the final output. Place ${language} text ONLY inside the quotation marks:
 
 "Act as a world-class Mobile E-commerce Designer. Generate an ultra-long vertical infographic landing page IMAGE (aspect ratio 9:32) for the product in the uploaded image. DO NOT write any HTML, CSS, UI code, or text-based code. Generate a purely visual, single continuous graphical IMAGE. Create one continuous journey with smooth color gradients matching the product vibe and subtle kinetic lines. No hard dividing lines. Feature the product repeatedly.
 
-* Dynamic background with particle effects. Product is prominent. Small Yellow Text: '[اكتب: الأكثر مبيعاً أو جديد]'
-* HUGE WHITE BOLD TEXT: '[عنوان رئيسي جذاب وقوي جداً بالعربية يوافق الزاوية]'
-* Large Text: '[جملة تشرح الفائدة الكبرى للمنتج بالعربية]'
+* Dynamic background with particle effects. Product is prominent. Small Text: '[Bestseller / New Label in ${language}]'
+* HUGE WHITE BOLD TEXT: '[Catchy hook/headline matching the angle in ${language}]'
+* Large Text: '[Sentence explaining the major benefit in ${language}]'
 
-* Smooth transition to a muted area. Negative color shift and problem icons. Large Bold Red Text: '[سؤال يلمس مشكلة العميل بالعربية]'
-* Medium Black Text: '[اشرح المشكلة باختصار بالعربية]'
+* Smooth transition to a muted area. Negative color shift and problem icons. Large Bold Red Text: '[Question touching the customer problem in ${language}]'
+* Medium Black Text: '[Briefly explain the problem in ${language}]'
 
-* Burst of bright light transitioning to a clean background. Product appears triumphantly. HUGE BOLD COLORED TEXT: '[عنوان يقدم المنتج كحل نهائي بالعربية]'
-* Large Black Text: '[جملة تؤكد قوة الحل بالعربية]'
+* Burst of bright light transitioning to a clean background. Product appears triumphantly. HUGE BOLD COLORED TEXT: '[Headline presenting product as the ultimate solution in ${language}]'
+* Large Black Text: '[Sentence confirming the power of the solution in ${language}]'
 
-* Side-by-side layout with visual contrast. Left side is dark/dull showing the problem. Right side is bright/vibrant showing the happy state. LARGE BOLD COLORED TEXT: '[عنوان جذاب للفرق قبل وبعد بالعربية]'
-* Medium Red Text: '❌ قبل: [وصف قصير لمعاناة بالعربية]'
-* Medium Green Text: '✅ بعد: [وصف قصير للراحة بالعربية]'
+* Side-by-side layout with visual contrast. Left side is dark/dull showing the problem. Right side is bright/vibrant showing the happy state. LARGE BOLD COLORED TEXT: '[Headline for the Before/After comparison in ${language}]'
+* Medium Red Text: '❌ [Short description of Before/Suffering in ${language}]'
+* Medium Green Text: '✅ [Short description of After/Relief in ${language}]'
 
-* Extreme close-up on a key feature. Use glowing effects. LARGE BOLD COLORED TEXT: '[عنوان الميزة الأولى بالعربية]'
-* Large Black Text: '[شرح قوي للميزة بالعربية]'
+* Extreme close-up on a key feature. Use glowing effects. LARGE BOLD COLORED TEXT: '[Headline for Feature 1 in ${language}]'
+* Large Black Text: '[Powerful explanation of the feature in ${language}]'
 
-* 2-Column Split Layout. Left Column is glowing OUR PRODUCT. Right Column is dull Gray generic competitor. LARGE BOLD COLORED TEXT: '[عنوان يقارن ويثبت التفوق بالعربية]'
-* Medium Green Text: '✔️ [ميزة 1 بالعربية]\\n✔️ [ميزة 2 بالعربية]'
-* Medium Red Text: '❌ [عيب 1 بالعربية]\\n❌ [عيب 2 بالعربية]'
+* 2-Column Split Layout. Left Column is glowing OUR PRODUCT. Right Column is dull Gray generic competitor. LARGE BOLD COLORED TEXT: '[Headline proving superiority in ${language}]'
+* Medium Green Text: '✔️ [Benefit 1 in ${language}]\\n✔️ [Benefit 2 in ${language}]'
+* Medium Red Text: '❌ [Flaw 1 in ${language}]\\n❌ [Flaw 2 in ${language}]'
 
-* Lifestyle visual of the product in use. LARGE BOLD COLORED TEXT: '[عنوان عن فائدة المنتج يومياً بالعربية]'
-* Large Black Text: '[كيف يحسن المنتج حياة الزبون بالعربية]'
+* Lifestyle visual of the product in use. LARGE BOLD COLORED TEXT: '[Headline about daily benefit in ${language}]'
+* Large Black Text: '[How the product improves the customer's life in ${language}]'
 
-* 5 large glowing stars ★★★★★ centered. Customer icons. LARGE BOLD BLACK TEXT: 'ثقة عملائنا'
-* Medium Black Text: '[مراجعة إيجابية قصيرة بلسان زبون بالعربية]'
+* 5 large glowing stars ★★★★★ centered. Customer icons. LARGE BOLD BLACK TEXT: '[Customer Trust / Reviews title in ${language}]'
+* Medium Black Text: '[Short positive customer review in ${language}]'
 
 * Solid, high-contrast footer. Product prominent next to CTA button.
 ${price ? `* High Visibility Price Tag: '${price}'` : ''}
 ${contact ? `* Contact Info / WhatsApp: '${contact}'` : ''}
-* Large White Bold Text: '⚠️ الكمية المتاحة محدودة جداً، اطلب الآن!'
-* HUGE BLACK TEXT on YELLOW Button: 'اطلب الآن - الدفع عند الاستلام'"`;
+* Large White Bold Text: '[Limited stock warning in ${language}]'
+* HUGE BLACK TEXT on YELLOW Button: '[Order Now / Cash on Delivery in ${language}]'"`;
 
         try {
             const response = await fetch('https://api.openai.com/v1/chat/completions', {

@@ -64,10 +64,11 @@ export default function SocialPromptTool() {
         const pName = productName.trim() !== '' ? productName : 'استنتج اسم المنتج من الصورة، أو استخدم كلمة "هذا المنتج"';
 
         const internalPrompt = `Step 1: Objectively describe the product in the image (packaging, primary text, and colors).
-Step 2: Based on this evidence, act as a world-class AI Prompt Engineer and Arabic Direct Response Copywriter. Analyze the inputs (Platform: ${platform} (${platformAr}), Product: ${pName}, Offer: ${offer || 'من الصورة'}, Angle: ${angle}, Price: ${price}, Contact: ${contact}, Target Language: ${language}, Aesthetic Style: ${outputStyle}).
+Step 2: Based on this evidence, act as a world-class AI Prompt Engineer and Direct Response Copywriter. Analyze the inputs (Platform: ${platform}, Product: ${pName}, Offer: ${offer || 'from image'}, Angle: ${angle}, Price: ${price}, Contact: ${contact}, Target Language: ${language}, Aesthetic Style: ${outputStyle}).
 
-CRITICAL RULE: The final output MUST be in ${language === 'Arabic' ? 'Arabic' : language}. All copywriting, headings, and descriptions inside the design prompt must be in ${language}.
+YOUR ONLY TASK IS TO OUTPUT A SINGLE DESIGN PROMPT FOR THE IMAGE GENERATOR SOFTWARE "NANO BANANA PRO". DO NOT OUTPUT CONVERSATIONAL TEXT OR EXPLANATIONS.
 
+CRITICAL RULE: The final output MUST be in ${language}. All copywriting, headings, and descriptions inside the design prompt must be in ${language}.
 ${language === 'Arabic' ? 'Targeting: Local and Gulf markets.' : ''}
 ${language === 'English' ? 'Targeting: Global markets and dropshipping.' : ''}
 ${language === 'French' ? 'Targeting: African and European French-speaking markets.' : ''}
@@ -75,23 +76,21 @@ ${language === 'Spanish' ? 'Targeting: Latin American and Spanish markets.' : ''
 
 Aesthetic Style to apply: ${outputStyle}.
 
-YOUR ONLY TASK IS TO OUTPUT A SINGLE DESIGN PROMPT FOR THE IMAGE GENERATOR SOFTWARE "NANO BANANA PRO". DO NOT OUTPUT CONVERSATIONAL TEXT OR EXPLANATIONS.
-
-CRITICAL RULE: "Nano Banana Pro" is the name of the software, NOT the product being sold. NEVER use the words "Nano Banana Pro" inside the Arabic copywriting.
+CRITICAL RULE: "Nano Banana Pro" is the name of the software, NOT the product being sold. NEVER use the words "Nano Banana Pro" inside the ${language} copywriting.
 
 The aspect ratio for ${platform} is ${ratio}.
 
 Output the text inside a single code block. Use this EXACT template:
 
-"Act as a world-class Social Media Ad Designer. Generate a high-converting advertisement graphic (aspect ratio ${ratio}) for the product in the uploaded image. Use a dynamic layout suited for ${platformAr}.
+"Act as a world-class Social Media Ad Designer. Generate a high-converting advertisement graphic (aspect ratio ${ratio}) for the product in the uploaded image. Use a dynamic layout suited for ${platform}.
 
-* HUGE BOLD TEXT AT THE TOP: '[اكتب خطاف/عنوان قوي جداً بالعربية يوافق الزاوية التسويقية]'
-* Medium Text highlighting a key benefit: '[اكتب فائدة رئيسية واضحة بالعربية]'
+* HUGE BOLD TEXT AT THE TOP: '[Catchy hook/headline matching the angle in ${language}]'
+* Medium Text highlighting a key benefit: '[Clear benefit in ${language}]'
 ${price ? `* Visible Price: '${price}'` : ''}
 ${contact ? `* Contact/WhatsApp: '${contact}'` : ''}
-* Prominent CTA Button at the bottom: 'اطلب الآن'
+* Prominent CTA Button at the bottom: '[Order Now / CTA in ${language}]'
 
-(Ensure all Arabic text is highly persuasive, matches the product and angle, and is placed ONLY inside the quotation marks)."`;
+(Ensure all ${language} text is highly persuasive, matches the product and angle, and is placed ONLY inside the quotation marks)."`;
 
         try {
             const response = await fetch('https://api.openai.com/v1/chat/completions', {
