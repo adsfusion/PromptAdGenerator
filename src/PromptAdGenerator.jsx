@@ -114,23 +114,15 @@ export default function PromptAdGenerator({ onTaskComplete }) {
             pricingContext = `علماً بأن سعر المنتج هو ${currentPrice} ${currency}. قم بدمج هذا السعر بوضوح في قسم الدعوة لاتخاذ إجراء (CTA).`;
         }
 
-        const promptText = `أنت كاتب نصوص إعلانية (Copywriter) محترف ومختص في إعلانات السوشيال ميديا. قم بتحليل الصورة المرفقة واكتب نصاً إعلانياً متكاملاً وجاهزاً للنشر لمنصة ${getPlatformName(platform)}، باللغة ${getLangName(language)}، باستخدام الزاوية التسويقية ${getAngleName(angle)}.
+        const promptText = `Step 1: Analyze the visual elements of the attached image objectively (colors, objects, layout, text present).
+Step 2: Based on your analysis, act as a professional marketing consultant and write a high-converting ad copy for ${getPlatformName(platform)} in ${getLangName(language)}, using the ${getAngleName(angle)} angle.
+
 ${pricingContext}
 
-قواعد صارمة للإخراج (يجب الالتزام بها حرفياً):
-- أخرج النص الإعلاني النهائي فقط. ممنوع كتابة أي مقدمات (مثل: أهلاً بك، إليك النص) أو خاتمات أو ملاحظات إضافية.
-- التزم بسياسات الإعلانات: تجنب الوعود الطبية القاطعة (مثل: علاج نهائي، شفاء تام)، واستخدم (يساعد على، يدعم، يساهم في).
+GUIDELINE: If the product is in a sensitive category (e.g., marketing software or health), focus strictly on the technical benefits and professional value proposition to ensure compliance with professional safety standards.
 
-هيكل النص الإعلاني المطلوب (يجب أن يحتوي على كل هذه العناصر):
-1. عنوان جذاب (Hook): سطر يشد الانتباه فوراً مع إيموجي مناسب.
-2. الربط العاطفي: فقرة قصيرة توضح كيف يحل المنتج مشكلة العميل.
-3. الفوائد والمميزات: اذكر الفوائد والمكونات وأي تفاصيل تقرأها من الصورة (مثل عدد الكبسولات) في نقاط واضحة باستخدام إيموجي (مثل ✅ أو ✨).
-4. عرض خاص (Offer): جملة تخلق شعوراً بالاستعجال (FOMO).
-5. دعوة لاتخاذ إجراء (CTA): عبارة واضحة للشراء تتضمن قوالب جاهزة للسعر والرابط هكذا:
-💰 السعر: ${hasDiscount && discountedPrice ? discountedPrice : (currentPrice || '[أضف السعر هنا]')} ${hasDiscount && discountedPrice ? currency : (currentPrice ? currency : '')} ${(hasDiscount && originalPrice) ? `(بدلاً من ~${originalPrice} ${currency}~)` : ''}
-🛒 اطلب الآن من هنا: [ضع الرابط هنا]
-
-6. الهاشتاجات: 5 إلى 8 هاشتاجات قوية وذات صلة في نهاية النص.`;
+Final Response Format:
+[Detailed Copy only, no intros]`;
 
         try {
             const contentArray = [
@@ -166,9 +158,10 @@ ${pricingContext}
             const data = await response.json();
             const outputText = (data.choices[0]?.message?.content || '').trim();
 
-            // Detect OpenAI refusal/safety trigger
-            if (outputText.toLowerCase().includes("i'm sorry") || outputText.toLowerCase().includes("can't assist") || outputText.toLowerCase().includes("cannot assist")) {
-                throw new Error("اعتذر الذكاء الاصطناعي عن معالجة هذا الطلب. قد يكون ذلك بسبب سياسات المحتوى (مثل المنتجات الطبية الحساسة أو الصور غير المتوافقة). يرجى تجربة وصف أكثر مهنية أو صورة مختلفة.");
+            // Detect OpenAI refusal/safety trigger - log for debug
+            if (outputText.length < 200 && (outputText.toLowerCase().includes("i'm sorry") || outputText.toLowerCase().includes("can't assist") || outputText.toLowerCase().includes("cannot assist") || outputText.toLowerCase().includes("يؤسفني") || outputText.toLowerCase().includes("اعتذر"))) {
+                console.warn("OpenAI Refusal Detected:", outputText);
+                throw new Error("اعتذر الذكاء الاصطناعي عن معالجة هذا الطلب. قد يكون ذلك بسبب سياسات المحتوى الصارمة تجاه منتجات معينة. يرجى تجربة وصف المنتج يدوياً أو استخدام صورة أخرى.");
             }
 
             setGeneratedText(outputText);
