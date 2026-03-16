@@ -1,13 +1,14 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import { Copy, Upload, Zap, BarChart3, Sparkles, Type, Image as ImageIcon, X } from 'lucide-react';
+import { Copy, Upload, Zap, BarChart3, Sparkles, Type, Image as ImageIcon, X, Wand2 } from 'lucide-react';
 const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
 
 export default function PromptAdGenerator({ onTaskComplete }) {
     const [platform, setPlatform] = useState('');
     const [angle, setAngle] = useState('');
     const [language, setLanguage] = useState('arabic');
+    const [outputStyle, setOutputStyle] = useState('Realistic');
     const [currentStep, setCurrentStep] = useState('idle'); // 'idle' | 'loading' | 'success'
     const [countdown, setCountdown] = useState(6);
     const [isGenerating, setIsGenerating] = useState(false);
@@ -105,7 +106,15 @@ export default function PromptAdGenerator({ onTaskComplete }) {
             }
         };
 
-        const getLangName = (l) => l === 'arabic' ? 'اللغة العربية' : 'اللغة الإنجليزية';
+        const getLangName = (l) => {
+            switch (l) {
+                case 'arabic': return 'اللغة العربية (Arabic)';
+                case 'english': return 'اللغة الإنجليزية (English)';
+                case 'french': return 'اللغة الفرنسية (French)';
+                case 'spanish': return 'اللغة الإسبانية (Spanish)';
+                default: return l;
+            }
+        };
 
         let pricingContext = '';
         if (hasDiscount && originalPrice && discountedPrice) {
@@ -118,6 +127,14 @@ export default function PromptAdGenerator({ onTaskComplete }) {
 Step 2: Based on your analysis, act as a professional marketing consultant and write a high-converting ad copy for ${getPlatformName(platform)} in ${getLangName(language)}, using the ${getAngleName(angle)} angle.
 
 ${pricingContext}
+
+CRITICAL RULE: The final output MUST be in ${getLangName(language)}. 
+${language === 'arabic' ? 'Targeting: Local and Gulf markets.' : ''}
+${language === 'english' ? 'Targeting: Global markets and dropshipping.' : ''}
+${language === 'french' ? 'Targeting: African and European French-speaking markets.' : ''}
+${language === 'spanish' ? 'Targeting: Latin American and Spanish markets.' : ''}
+
+Aesthetic Style to reflect in the visual description/copy (if applicable): ${outputStyle}.
 
 GUIDELINE: If the product is in a sensitive category (e.g., marketing software or health), focus strictly on the technical benefits and professional value proposition to ensure compliance with professional safety standards.
 
@@ -324,8 +341,27 @@ Final Response Format:
                                     disabled={currentStep === 'loading'}
                                     className="w-full bg-slate-800 border-none rounded-lg px-4 py-3 text-slate-200 focus:ring-2 focus:ring-purple-500 appearance-none outline-none disabled:opacity-50"
                                 >
-                                    <option value="arabic">عربي</option>
-                                    <option value="english">إنجليزي</option>
+                                    <option value="arabic">العربية (الأسواق المحلية والخليج)</option>
+                                    <option value="english">الإنجليزية (الأسواق العالمية والدروبشيبينغ)</option>
+                                    <option value="french">الفرنسية (أسواق أفريقيا وأوروبا)</option>
+                                    <option value="spanish">الإسبانية (أمريكا اللاتينية وإسبانيا)</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label className="mb-2 block text-sm font-semibold text-slate-200 flex items-center gap-2">
+                                    <Wand2 size={16} className="text-purple-400" /> نمط الإخراج
+                                </label>
+                                <select
+                                    value={outputStyle}
+                                    onChange={(e) => setOutputStyle(e.target.value)}
+                                    disabled={currentStep === 'loading'}
+                                    className="w-full bg-slate-800 border-none rounded-lg px-4 py-3 text-slate-200 focus:ring-2 focus:ring-purple-500 appearance-none outline-none disabled:opacity-50"
+                                >
+                                    <option value="Realistic">واقعي (Realistic)</option>
+                                    <option value="3D Isometric">ثلاثي الأبعاد (3D Isometric)</option>
+                                    <option value="Minimalist">بسيط (Minimalist)</option>
+                                    <option value="Vibrant">حيوي (Vibrant)</option>
                                 </select>
                             </div>
                         </div>

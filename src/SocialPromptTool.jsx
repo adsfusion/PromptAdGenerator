@@ -20,6 +20,8 @@ export default function SocialPromptTool() {
     const [contact, setContact]         = useState('');
     const [angle, setAngle]             = useState('مشكلة وحل');
     const [platform, setPlatform]       = useState('Instagram');
+    const [language, setLanguage]       = useState('Arabic');
+    const [outputStyle, setOutputStyle] = useState('Realistic');
     const [isGenerating, setIsGenerating] = useState(false);
     const [result, setResult]           = useState('');
     const [copied, setCopied]           = useState(false);
@@ -62,7 +64,16 @@ export default function SocialPromptTool() {
         const pName = productName.trim() !== '' ? productName : 'استنتج اسم المنتج من الصورة، أو استخدم كلمة "هذا المنتج"';
 
         const internalPrompt = `Step 1: Objectively describe the product in the image (packaging, primary text, and colors).
-Step 2: Based on this evidence, act as a world-class AI Prompt Engineer and Arabic Direct Response Copywriter. Analyze the inputs (Platform: ${platform} (${platformAr}), Product: ${pName}, Offer: ${offer || 'من الصورة'}, Angle: ${angle}, Price: ${price}, Contact: ${contact}).
+Step 2: Based on this evidence, act as a world-class AI Prompt Engineer and Arabic Direct Response Copywriter. Analyze the inputs (Platform: ${platform} (${platformAr}), Product: ${pName}, Offer: ${offer || 'من الصورة'}, Angle: ${angle}, Price: ${price}, Contact: ${contact}, Target Language: ${language}, Aesthetic Style: ${outputStyle}).
+
+CRITICAL RULE: The final output MUST be in ${language === 'Arabic' ? 'Arabic' : language}. All copywriting, headings, and descriptions inside the design prompt must be in ${language}.
+
+${language === 'Arabic' ? 'Targeting: Local and Gulf markets.' : ''}
+${language === 'English' ? 'Targeting: Global markets and dropshipping.' : ''}
+${language === 'French' ? 'Targeting: African and European French-speaking markets.' : ''}
+${language === 'Spanish' ? 'Targeting: Latin American and Spanish markets.' : ''}
+
+Aesthetic Style to apply: ${outputStyle}.
 
 YOUR ONLY TASK IS TO OUTPUT A SINGLE DESIGN PROMPT FOR THE IMAGE GENERATOR SOFTWARE "NANO BANANA PRO". DO NOT OUTPUT CONVERSATIONAL TEXT OR EXPLANATIONS.
 
@@ -147,6 +158,8 @@ ${contact ? `* Contact/WhatsApp: '${contact}'` : ''}
         setContact('');
         setAngle('مشكلة وحل');
         setPlatform('Instagram');
+        setLanguage('Arabic');
+        setOutputStyle('Realistic');
         setResult('');
         setError('');
         if (fileRef.current) fileRef.current.value = '';
@@ -253,6 +266,24 @@ ${contact ? `* Contact/WhatsApp: '${contact}'` : ''}
                                         <option>دليل اجتماعي</option>
                                         <option>عرض محدود بوقت</option>
                                         <option>فائدة وظيفية</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <p className={lbl}><Share2 size={13} className="text-purple-400" />لغة المحتوى</p>
+                                    <select value={language} onChange={e => setLanguage(e.target.value)} className={sel}>
+                                        <option value="Arabic">العربية (الأسواق المحلية والخليج)</option>
+                                        <option value="English">الإنجليزية (الأسواق العالمية والدروبشيبينغ)</option>
+                                        <option value="French">الفرنسية (أسواق أفريقيا وأوروبا)</option>
+                                        <option value="Spanish">الإسبانية (أمريكا اللاتينية وإسبانيا)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <p className={lbl}><Wand2 size={13} className="text-purple-400" />نمط الإخراج</p>
+                                    <select value={outputStyle} onChange={e => setOutputStyle(e.target.value)} className={sel}>
+                                        <option value="Realistic">واقعي (Realistic)</option>
+                                        <option value="3D Isometric">ثلاثي الأبعاد (3D Isometric)</option>
+                                        <option value="Minimalist">بسيط (Minimalist)</option>
+                                        <option value="Vibrant">حيوي (Vibrant)</option>
                                     </select>
                                 </div>
                                 <div>

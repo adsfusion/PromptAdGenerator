@@ -13,6 +13,8 @@ export default function LandingPagePromptTool() {
     const [price, setPrice] = useState('');
     const [contact, setContact] = useState('');
     const [marketingAngle, setMarketingAngle] = useState('مشكلة وحل');
+    const [language, setLanguage] = useState('Arabic');
+    const [outputStyle, setOutputStyle] = useState('Realistic');
     const [isGenerating, setIsGenerating] = useState(false);
     const [result, setResult] = useState('');
     const [copied, setCopied] = useState(false);
@@ -49,9 +51,18 @@ export default function LandingPagePromptTool() {
         const pName = productName.trim() !== '' ? productName : 'استنتج اسم المنتج من الصورة، أو استخدم كلمة "هذا المنتج"';
 
         const internalPrompt = `Step 1: Objectively describe the visual attributes of the product in the image (packaging shape, colors, and the text written on the label).
-Step 2: Based on the visual evidence, act as a world-class AI Prompt Engineer and Arabic Direct Response Copywriter. Analyze the inputs (Product: ${pName}, Offer: ${offerDescription}, Angle: ${marketingAngle}, Price: ${price}, Contact: ${contact}).
+Step 2: Based on the visual evidence, act as a world-class AI Prompt Engineer and Arabic Direct Response Copywriter. Analyze the inputs (Product: ${pName}, Offer: ${offerDescription}, Angle: ${marketingAngle}, Price: ${price}, Contact: ${contact}, Target Language: ${language}, Aesthetic Style: ${outputStyle}).
 
 YOUR ONLY TASK IS TO OUTPUT A SINGLE, READY-TO-COPY DESIGN PROMPT FOR THE IMAGE GENERATOR SOFTWARE "NANO BANANA PRO". 
+
+CRITICAL RULE: The final output MUST be in ${language === 'Arabic' ? 'Arabic' : language}. All copywriting, headings, and descriptions inside the design prompt must be in ${language}.
+
+${language === 'Arabic' ? 'Targeting: Local and Gulf markets.' : ''}
+${language === 'English' ? 'Targeting: Global markets and dropshipping.' : ''}
+${language === 'French' ? 'Targeting: African and European French-speaking markets.' : ''}
+${language === 'Spanish' ? 'Targeting: Latin American and Spanish markets.' : ''}
+
+Aesthetic Style to apply: ${outputStyle}.
 
 CRITICAL RULE: "Nano Banana Pro" is the name of the software, NOT the product being sold. NEVER use the words "Nano Banana Pro" inside the Arabic copywriting. DO NOT OUTPUT ANY CONVERSATIONAL TEXT OR SEPARATE COPYWRITING. OUTPUT ONLY THE CODE BLOCK.
 
@@ -156,6 +167,8 @@ ${contact ? `* Contact Info / WhatsApp: '${contact}'` : ''}
         setPrice('');
         setContact('');
         setMarketingAngle('مشكلة وحل');
+        setLanguage('Arabic');
+        setOutputStyle('Realistic');
         setResult('');
         setError('');
         if (fileRef.current) fileRef.current.value = '';
@@ -243,6 +256,24 @@ ${contact ? `* Contact Info / WhatsApp: '${contact}'` : ''}
                                         <option>دليل اجتماعي</option>
                                         <option>عرض محدود بوقت</option>
                                         <option>فائدة وظيفية</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <p className={lbl}><FileText size={13} className="text-purple-400" />لغة المحتوى</p>
+                                    <select value={language} onChange={e => setLanguage(e.target.value)} className={sel}>
+                                        <option value="Arabic">العربية (الأسواق المحلية والخليج)</option>
+                                        <option value="English">الإنجليزية (الأسواق العالمية والدروبشيبينغ)</option>
+                                        <option value="French">الفرنسية (أسواق أفريقيا وأوروبا)</option>
+                                        <option value="Spanish">الإسبانية (أمريكا اللاتينية وإسبانيا)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <p className={lbl}><Wand2 size={13} className="text-purple-400" />نمط الإخراج</p>
+                                    <select value={outputStyle} onChange={e => setOutputStyle(e.target.value)} className={sel}>
+                                        <option value="Realistic">واقعي (Realistic)</option>
+                                        <option value="3D Isometric">ثلاثي الأبعاد (3D Isometric)</option>
+                                        <option value="Minimalist">بسيط (Minimalist)</option>
+                                        <option value="Vibrant">حيوي (Vibrant)</option>
                                     </select>
                                 </div>
                                 <div>
