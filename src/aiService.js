@@ -78,7 +78,7 @@ async function callGemini(systemPrompt, userPrompt, imageBase64) {
     if (!genAI) throw new Error("Gemini API Key is missing");
 
     const model = genAI.getGenerativeModel({ 
-        model: "gemini-1.5-flash-latest",
+        model: "gemini-2.0-flash",
         systemInstruction: systemPrompt
     });
 
