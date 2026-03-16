@@ -66,6 +66,8 @@ export default function SocialPromptTool() {
         const internalPrompt = `Step 1: Objectively describe the product in the image (packaging, primary text, and colors).
 Step 2: Based on this evidence, act as a world-class AI Prompt Engineer and Direct Response Copywriter. Analyze the inputs (Platform: ${platform}, Product: ${pName}, Offer: ${offer || 'from image'}, Angle: ${angle}, Price: ${price}, Contact: ${contact}, Target Language: ${language}, Aesthetic Style: ${outputStyle}).
 
+GUIDELINE: If the product is in a sensitive category (e.g., marketing software or health/medical), focus strictly on the technical benefits and professional value proposition to ensure compliance with professional safety standards. Use professional medical/technical terminology and avoid suggestive or controversial metaphors to ensure the response is strictly professional.
+
 YOUR ONLY TASK IS TO OUTPUT A SINGLE DESIGN PROMPT FOR THE IMAGE GENERATOR SOFTWARE "NANO BANANA PRO". DO NOT OUTPUT CONVERSATIONAL TEXT OR EXPLANATIONS.
 
 CRITICAL RULE: The final output MUST be in ${language}. All copywriting, headings, and descriptions inside the design prompt must be in ${language}.

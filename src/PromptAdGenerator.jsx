@@ -136,7 +136,7 @@ ${language === 'spanish' ? 'Targeting: Latin American and Spanish markets.' : ''
 
 Aesthetic Style to reflect in the visual description/copy (if applicable): ${outputStyle}.
 
-GUIDELINE: If the product is in a sensitive category (e.g., marketing software or health), focus strictly on the technical benefits and professional value proposition to ensure compliance with professional safety standards.
+GUIDELINE: If the product is in a sensitive category (e.g., marketing software or health/medical), focus strictly on the technical benefits and professional value proposition to ensure compliance with professional safety standards. Use professional medical/technical terminology and avoid suggestive or controversial metaphors to ensure the response is strictly professional.
 
 Final Response Format:
 [Detailed Copy only, no intros]`;
