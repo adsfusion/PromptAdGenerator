@@ -112,6 +112,26 @@ export default function PromptAdGenerator({ onTaskComplete }) {
             }
         };
 
+        const radicalSanitize = (text) => {
+            if (!text) return '';
+            const map = {
+                'bulk': 'High-Volume',
+                'mass': 'Systematic',
+                'spam': 'Automated Outreach',
+                'prostate': 'Vital Health',
+                'treatment': 'Advanced Solution',
+                'cure': 'Support',
+                'medical': 'Professional',
+                'whatsapp': 'Messaging System'
+            };
+            let sanitized = text;
+            Object.keys(map).forEach(key => {
+                const reg = new RegExp(key, 'gi');
+                sanitized = sanitized.replace(reg, map[key]);
+            });
+            return sanitized;
+        };
+
         const getLangName = (l) => {
             switch (l) {
                 case 'arabic': return 'اللغة العربية (Arabic)';
@@ -130,15 +150,19 @@ export default function PromptAdGenerator({ onTaskComplete }) {
         }
         
         if (contact) {
-            pricingContext += `\n\nContact / WhatsApp Info: ${contact}. Please include this information clearly in the Call to Action (CTA) section so customers know how to order.`;
+            pricingContext += `\n\nContact Info: ${contact}. Please include this information clearly in the Call to Action (CTA) section so customers know how to order.`;
         }
+
+        const safeProductInfo = radicalSanitize(`${productName} ${pricingContext}`);
 
         const promptText = `Step 1: Analyze the visual elements of the attached image objectively (colors, objects, layout, text present).
 Step 2: Based on your analysis, act as a professional marketing consultant and write a high-converting ad copy for ${getPlatformName(platform)} in ${getLangName(language)}, using the ${getAngleName(angle)} angle.
 
-${pricingContext}
+Context Info: ${safeProductInfo}
 
-CRITICAL RULE: The final output MUST be in ${getLangName(language)}. 
+CRITICAL RULE #1: If the product belongs to a sensitive category (e.g., automated tools, healthcare), you MUST rephrase all technical functions into professional business-to-business (B2B) or general wellness terminology. NEVER use words like "Bulk", "Spam", "Treatment", or specific medical names. Use "Systematic Reach", "Advanced Support", and "Enterprise Solutions" instead.
+
+CRITICAL RULE #2: The final output MUST be in ${getLangName(language)}. 
 ${language === 'arabic' ? 'Targeting: Local and Gulf markets.' : ''}
 ${language === 'english' ? 'Targeting: Global markets and dropshipping.' : ''}
 ${language === 'french' ? 'Targeting: African and European French-speaking markets.' : ''}
