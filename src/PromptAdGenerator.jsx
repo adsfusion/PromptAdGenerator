@@ -21,6 +21,7 @@ export default function PromptAdGenerator({ onTaskComplete }) {
     const [originalPrice, setOriginalPrice] = useState('');
     const [discountedPrice, setDiscountedPrice] = useState('');
     const [currency, setCurrency] = useState('دولار $');
+    const [contact, setContact] = useState('');
 
     // New states for AI integration
     const [imagePreview, setImagePreview] = useState(null);
@@ -121,6 +122,10 @@ export default function PromptAdGenerator({ onTaskComplete }) {
             pricingContext = `Note that there is an exclusive offer! The original price was ${originalPrice} ${currency} and the current price after discount is ${discountedPrice} ${currency}. Highlight this discount strongly in the ad to create a sense of urgency (FOMO), and write the prices clearly in the CTA section in ${language}.`;
         } else if (!hasDiscount && currentPrice) {
             pricingContext = `Note that the product price is ${currentPrice} ${currency}. Integrate this price clearly into the Call to Action (CTA) section in ${language}.`;
+        }
+        
+        if (contact) {
+            pricingContext += `\n\nContact / WhatsApp Info: ${contact}. Please include this information clearly in the Call to Action (CTA) section so customers know how to order.`;
         }
 
         const promptText = `Step 1: Analyze the visual elements of the attached image objectively (colors, objects, layout, text present).
@@ -455,6 +460,20 @@ Final Response Format:
                                         </div>
                                     </>
                                 )}
+                                
+                                <div className="col-span-full mt-2">
+                                    <label className="mb-2 block text-xs font-semibold text-slate-400 flex items-center gap-2">
+                                        رقم التواصل / واتساب (اختياري)
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={contact}
+                                        onChange={(e) => setContact(e.target.value)}
+                                        disabled={currentStep === 'loading'}
+                                        placeholder="مثال: +212600000000"
+                                        className="w-full bg-slate-800 border-none rounded-lg px-4 py-3 text-slate-200 focus:ring-2 focus:ring-purple-500 appearance-none outline-none disabled:opacity-50"
+                                    />
+                                </div>
                             </div>
                         </div>
 
@@ -544,6 +563,11 @@ Final Response Format:
                                                 setAngle('');
                                                 setFileData(null);
                                                 setImagePreview(null);
+                                                setContact('');
+                                                setCurrentPrice('');
+                                                setOriginalPrice('');
+                                                setDiscountedPrice('');
+                                                setHasDiscount(false);
                                             }}
                                             className="flex-1 bg-purple-600 hover:bg-purple-500 text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-purple-900/20 flex items-center justify-center gap-2 text-sm"
                                         >

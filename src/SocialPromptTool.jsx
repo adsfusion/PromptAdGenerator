@@ -16,8 +16,12 @@ export default function SocialPromptTool() {
     const [images, setImages]           = useState([]);
     const [productName, setProductName] = useState('');
     const [offer, setOffer]             = useState('');
-    const [price, setPrice]             = useState('');
-    const [contact, setContact]         = useState('');
+    const [hasDiscount, setHasDiscount] = useState(false);
+    const [currentPrice, setCurrentPrice] = useState('');
+    const [originalPrice, setOriginalPrice] = useState('');
+    const [discountedPrice, setDiscountedPrice] = useState('');
+    const [currency, setCurrency] = useState('دولار $');
+    const [contact, setContact] = useState('');
     const [angle, setAngle]             = useState('مشكلة وحل');
     const [platform, setPlatform]       = useState('Instagram');
     const [language, setLanguage]       = useState('Arabic');
@@ -63,8 +67,15 @@ export default function SocialPromptTool() {
         // التعديل الذكي هنا: معالجة حالة ترك اسم المنتج فارغاً
         const pName = productName.trim() !== '' ? productName : 'استنتج اسم المنتج من الصورة، أو استخدم كلمة "هذا المنتج"';
 
+        let pricingContext = '';
+        if (hasDiscount && originalPrice && discountedPrice) {
+            pricingContext = `Note that there is an exclusive offer! The original price was ${originalPrice} ${currency} and the current price after discount is ${discountedPrice} ${currency}. Highlight this discount strongly in the design prompt to create a sense of urgency (FOMO).`;
+        } else if (!hasDiscount && currentPrice) {
+            pricingContext = `Note that the product price is ${currentPrice} ${currency}. Integrate this price clearly into the social media ad design prompt.`;
+        }
+
         const internalPrompt = `Step 1: Objectively describe the product in the image (packaging, primary text, and colors).
-Step 2: Based on this evidence, act as a world-class AI Prompt Engineer and Direct Response Copywriter. Analyze the inputs (Platform: ${platform}, Product: ${pName}, Offer: ${offer || 'from image'}, Angle: ${angle}, Price: ${price}, Contact: ${contact}, Target Language: ${language}, Aesthetic Style: ${outputStyle}).
+Step 2: Based on this evidence, act as a world-class AI Prompt Engineer and Direct Response Copywriter. Analyze the inputs (Platform: ${platform}, Product: ${pName}, Pricing Info: ${pricingContext}, Angle: ${angle}, Contact: ${contact}, Target Language: ${language}, Aesthetic Style: ${outputStyle}).
 
 GUIDELINE: If the product is in a sensitive category (e.g., marketing software or health/medical), focus strictly on the technical benefits and professional value proposition to ensure compliance with professional safety standards. Use professional medical/technical terminology and avoid suggestive or controversial metaphors to ensure the response is strictly professional.
 
@@ -88,7 +99,7 @@ Output the text inside a single code block. Use this EXACT template:
 
 * HUGE BOLD TEXT AT THE TOP: '[Catchy hook/headline matching the angle in ${language}]'
 * Medium Text highlighting a key benefit: '[Clear benefit in ${language}]'
-${price ? `* Visible Price: '${price}'` : ''}
+${hasDiscount && originalPrice && discountedPrice ? `* Original Price: '${originalPrice} ${currency}'\\n* Discounted Price: '${discountedPrice} ${currency}'` : (!hasDiscount && currentPrice ? `* Price: '${currentPrice} ${currency}'` : '')}
 ${contact ? `* Contact/WhatsApp: '${contact}'` : ''}
 * Prominent CTA Button at the bottom: '[Order Now / CTA in ${language}]'
 
@@ -155,7 +166,11 @@ ${contact ? `* Contact/WhatsApp: '${contact}'` : ''}
         setImages([]);
         setProductName('');
         setOffer('');
-        setPrice('');
+        setHasDiscount(false);
+        setCurrentPrice('');
+        setOriginalPrice('');
+        setDiscountedPrice('');
+        setCurrency('دولار $');
         setContact('');
         setAngle('مشكلة وحل');
         setPlatform('Instagram');
@@ -287,10 +302,61 @@ ${contact ? `* Contact/WhatsApp: '${contact}'` : ''}
                                         <option value="Vibrant">حيوي (Vibrant)</option>
                                     </select>
                                 </div>
-                                <div>
-                                    <p className={lbl}><Sparkles size={13} className="text-purple-400" />السعر <span className="text-white/30 font-normal">(اختياري)</span></p>
-                                    <input type="text" value={price} onChange={e => setPrice(e.target.value)} placeholder="مثال: 199 ريال" className={inp} />
+
+                                <div className="md:col-span-2 bg-white/5 border border-white/10 rounded-2xl p-5 mt-2">
+                                    <div className="flex items-center justify-between mb-4">
+                                        <p className="text-xs font-bold text-purple-400 flex items-center gap-2">
+                                            <Sparkles size={13} />التسعير والعروض (اختياري)
+                                        </p>
+                                        <label className="relative inline-flex items-center cursor-pointer">
+                                            <input
+                                                type="checkbox"
+                                                className="sr-only peer"
+                                                checked={hasDiscount}
+                                                onChange={() => setHasDiscount(!hasDiscount)}
+                                            />
+                                            <div className="w-10 h-5 bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:right-[2px] after:bg-white/40 after:border-white/10 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-purple-600"></div>
+                                            <span className="mr-3 text-[10px] font-medium text-white/40">يوجد خصم</span>
+                                        </label>
+                                    </div>
+
+                                    <div className="grid md:grid-cols-2 gap-4">
+                                        {!hasDiscount ? (
+                                            <div className="col-span-full flex gap-3">
+                                                <div className="flex-1">
+                                                    <p className="text-[10px] text-white/30 mb-1.5 mr-1">السعر الحالي</p>
+                                                    <input type="number" value={currentPrice} onChange={e => setCurrentPrice(e.target.value)} placeholder="مثال: 99" className={inp} />
+                                                </div>
+                                                <div className="w-24">
+                                                    <p className="text-[10px] text-white/30 mb-1.5 mr-1">العملة</p>
+                                                    <select value={currency} onChange={e => setCurrency(e.target.value)} className={sel}>
+                                                        {['دولار $', 'ريال', 'درهم', 'جنيه', 'دينار', 'يورو €'].map(c => <option key={c} value={c}>{c}</option>)}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <>
+                                                <div>
+                                                    <p className="text-[10px] text-white/30 mb-1.5 mr-1">السعر الأصلي</p>
+                                                    <input type="number" value={originalPrice} onChange={e => setOriginalPrice(e.target.value)} placeholder="مثال: 150" className={inp} />
+                                                </div>
+                                                <div className="flex gap-3">
+                                                    <div className="flex-1">
+                                                        <p className="text-[10px] text-white/30 mb-1.5 mr-1">السعر بعد الخصم</p>
+                                                        <input type="number" value={discountedPrice} onChange={e => setDiscountedPrice(e.target.value)} placeholder="مثال: 99" className={inp} />
+                                                    </div>
+                                                    <div className="w-24">
+                                                        <p className="text-[10px] text-white/30 mb-1.5 mr-1">العملة</p>
+                                                        <select value={currency} onChange={e => setCurrency(e.target.value)} className={sel}>
+                                                            {['دولار $', 'ريال', 'درهم', 'جنيه', 'دينار', 'يورو €'].map(c => <option key={c} value={c}>{c}</option>)}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </>
+                                        )}
+                                    </div>
                                 </div>
+
                                 <div>
                                     <p className={lbl}><Target size={13} className="text-purple-400" />رقم التواصل <span className="text-white/30 font-normal">(اختياري)</span></p>
                                     <input type="text" value={contact} onChange={e => setContact(e.target.value)} placeholder="مثال: عبر الواتساب" className={inp} />
