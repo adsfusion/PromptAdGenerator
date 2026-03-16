@@ -1,7 +1,9 @@
 import { useState, useRef } from 'react';
 import { Copy, Upload, Zap, BarChart3, Sparkles, Type, Image as ImageIcon, X, Wand2 } from 'lucide-react';
 import { generateContent, radicalSanitize } from './aiService';
-const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
+const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY
+});
 const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 
 export default function PromptAdGenerator({ onTaskComplete }) {
@@ -134,7 +136,7 @@ REPHRASING RULE: Never use terms like "Bulk", "Spam", "Treatment", or specific m
         } else if (!hasDiscount && currentPrice) {
             pricingContext = `Note that the product price is ${currentPrice} ${currency}. Integrate this price clearly into the Call to Action (CTA) section in ${language}.`;
         }
-        
+
         const safeProductInfo = radicalSanitize(`${productName} ${pricingContext}`);
 
         const promptText = `Analyze the visual structure and professional design of the attached image. Write a high-converting ad copy for ${getPlatformName(platform)} in ${getLangName(language)}, using the ${getAngleName(angle)} angle.
@@ -166,14 +168,14 @@ ${language === 'spanish' ? '- Targeting: Latin American and Spanish markets.' : 
             }
 
             setGeneratedText(outputText);
-            
+
             // Timing Fix: Ensure total wait time is 30 seconds
             const elapsed = Date.now() - startTime;
             const remaining = Math.max(0, 30000 - elapsed);
             if (remaining > 0) {
                 await new Promise(resolve => setTimeout(resolve, remaining));
             }
-            
+
             setCurrentStep('success');
             if (onTaskComplete) onTaskComplete();
         } catch (error) {
@@ -295,18 +297,18 @@ ${language === 'spanish' ? '- Targeting: Latin American and Spanish markets.' : 
                         <div className="mb-4">
                             <label className="mb-3 block text-sm font-semibold text-foreground flex items-center gap-2">
                                 <Type size={16} className="text-purple-400" />
-                                {language === 'arabic' ? 'اسم المنتج' : 
-                                 language === 'english' ? 'Product Name' :
-                                 language === 'french' ? 'Nom du Produit' : 'Nombre del Producto'}
+                                {language === 'arabic' ? 'اسم المنتج' :
+                                    language === 'english' ? 'Product Name' :
+                                        language === 'french' ? 'Nom du Produit' : 'Nombre del Producto'}
                             </label>
                             <input
                                 type="text"
                                 value={productName}
                                 onChange={(e) => setProductName(e.target.value)}
                                 disabled={currentStep === 'loading'}
-                                placeholder={language === 'arabic' ? 'مثال: WaCRM - برنامج إدارة خدمة العملاء' : 
-                                             language === 'english' ? 'e.g. WaCRM - Customer Service Management' :
-                                             language === 'french' ? 'ex: WaCRM - Gestion de Service Client' : 'ej: WaCRM - Gestión de Servicio al Cliente'}
+                                placeholder={language === 'arabic' ? 'مثال: WaCRM - برنامج إدارة خدمة العملاء' :
+                                    language === 'english' ? 'e.g. WaCRM - Customer Service Management' :
+                                        language === 'french' ? 'ex: WaCRM - Gestion de Service Client' : 'ej: WaCRM - Gestión de Servicio al Cliente'}
                                 className="w-full bg-slate-800 border-none rounded-xl px-4 py-3 text-slate-200 placeholder:text-slate-500 focus:ring-2 focus:ring-purple-500 appearance-none outline-none disabled:opacity-50"
                             />
                         </div>
@@ -395,9 +397,9 @@ ${language === 'spanish' ? '- Targeting: Latin American and Spanish markets.' : 
                         {/* Pricing and Offers */}
                         <div className="bg-slate-900/40 border border-slate-800 rounded-xl p-6">
                             <h3 className="mb-4 text-sm font-semibold text-foreground flex items-center justify-between">
-                                {language === 'arabic' ? 'التسعير والعروض (اختياري)' : 
-                                 language === 'english' ? 'Pricing & Offers (Optional)' :
-                                 language === 'french' ? 'Prix et Offres (Optionnel)' : 'Precios y Ofertas (Opcional)'}
+                                {language === 'arabic' ? 'التسعير والعروض (اختياري)' :
+                                    language === 'english' ? 'Pricing & Offers (Optional)' :
+                                        language === 'french' ? 'Prix et Offres (Optionnel)' : 'Precios y Ofertas (Opcional)'}
                                 <label className="relative inline-flex items-center cursor-pointer">
                                     <input
                                         type="checkbox"
@@ -408,9 +410,9 @@ ${language === 'spanish' ? '- Targeting: Latin American and Spanish markets.' : 
                                     />
                                     <div className="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:right-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
                                     <span className="mr-3 text-xs font-medium text-slate-300">
-                                        {language === 'arabic' ? 'عرض حصري / يوجد خصم' : 
-                                         language === 'english' ? 'Exclusive Offer / Discount' :
-                                         language === 'french' ? 'Offre Exclusive / Remise' : 'Oferta Exclusiva / Descuento'}
+                                        {language === 'arabic' ? 'عرض حصري / يوجد خصم' :
+                                            language === 'english' ? 'Exclusive Offer / Discount' :
+                                                language === 'french' ? 'Offre Exclusive / Remise' : 'Oferta Exclusiva / Descuento'}
                                     </span>
                                 </label>
                             </h3>
@@ -477,7 +479,7 @@ ${language === 'spanish' ? '- Targeting: Latin American and Spanish markets.' : 
                                         </div>
                                     </>
                                 )}
-                                
+
                                 <div className="col-span-full mt-2">
                                     <label className="mb-2 block text-xs font-semibold text-slate-400 flex items-center gap-2">
                                         {getUIText(language).contact}
@@ -520,7 +522,7 @@ ${language === 'spanish' ? '- Targeting: Latin American and Spanish markets.' : 
                                 <div className="bg-blue-600/20 py-2 px-4 flex items-center justify-center gap-2 border-b border-blue-500/20">
                                     <span className="text-blue-400 text-sm font-bold">⏳ جاري التوليد...</span>
                                 </div>
-                                
+
                                 <div className="p-8 flex flex-col items-center text-center">
                                     {/* Spinner */}
                                     <div className="w-12 h-12 border-4 border-slate-700 border-t-blue-500 rounded-full animate-spin mb-4"></div>
@@ -566,13 +568,13 @@ ${language === 'spanish' ? '- Targeting: Latin American and Spanish markets.' : 
                                     </div>
 
                                     <div className="flex gap-3">
-                                        <button 
+                                        <button
                                             onClick={() => setCurrentStep('idle')}
                                             className="flex-1 bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 rounded-xl transition-all border border-slate-700 flex items-center justify-center gap-2 text-sm"
                                         >
                                             <ImageIcon size={16} /> تعديل
                                         </button>
-                                        <button 
+                                        <button
                                             onClick={() => {
                                                 setGeneratedText('');
                                                 setCurrentStep('idle');
