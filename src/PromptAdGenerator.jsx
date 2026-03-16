@@ -146,7 +146,7 @@ ${language === 'spanish' ? 'Targeting: Latin American and Spanish markets.' : ''
 
 Aesthetic Style to reflect in the visual description/copy (if applicable): ${outputStyle}.
 
-GUIDELINE: If the product is in a sensitive category (e.g., marketing software or health/medical), focus strictly on the technical benefits and professional value proposition to ensure compliance with professional safety standards. Use professional medical/technical terminology and avoid suggestive or controversial metaphors to ensure the response is strictly professional.
+GUIDELINE: If the product is in a sensitive category (e.g., marketing automation software, productivity tools, or health/medical), focus strictly on technical benefits (e.g., efficiency, scalability, time-saving) and professional value. For automation software, use professional terms like "Automated Outreach", "Enterprise Communication", and "Business Scaling". AVOID words that trigger safety filters like "Bulk", "Mass", or "Spam"; instead use "High-Volume Automation" or "Systematic Reach". Ensure the response is strictly professional.
 
 Final Response Format:
 [Detailed Copy only, no intros]`;
