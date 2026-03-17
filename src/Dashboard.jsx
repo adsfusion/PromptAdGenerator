@@ -1,4 +1,3 @@
-import React from 'react';
 import {
     Megaphone, Share2, FileText, Type, ImageMinus,
     Zap, Activity, Sparkles, ArrowUpRight, Star, Target

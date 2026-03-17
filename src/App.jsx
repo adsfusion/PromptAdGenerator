@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import PromptAdGenerator from './PromptAdGenerator';
 import ImageCompressor from './ImageCompressor';
 import ArabicTashkeel from './ArabicTashkeel';
