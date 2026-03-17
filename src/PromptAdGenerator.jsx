@@ -64,10 +64,6 @@ export default function PromptAdGenerator({ onTaskComplete }) {
             setErrorMsg('يرجى اختيار المنصة أولاً.');
             return;
         }
-        if (!OPENAI_API_KEY) {
-            setErrorMsg('مفتاح OpenAI غير موجود في ملف .env');
-            return;
-        }
 
         setCurrentStep('loading');
         setIsGenerating(true);
