@@ -1,10 +1,6 @@
 import { useState, useRef } from 'react';
 import { Copy, Upload, Zap, BarChart3, Sparkles, Type, Image as ImageIcon, X, Wand2 } from 'lucide-react';
 import { generateContent, radicalSanitize } from './aiService';
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY
-});
-const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 
 export default function PromptAdGenerator({ onTaskComplete }) {
     const [productName, setProductName] = useState('');
