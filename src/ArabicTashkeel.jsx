@@ -1,5 +1,3 @@
-'use client';
-
 import { useState } from 'react';
 import { Copy, CheckCheck, Sparkles, Type, Eraser, AlignRight } from 'lucide-react';
 

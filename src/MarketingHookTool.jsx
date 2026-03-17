@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
     Sparkles, Copy, Check, Info, Star, Zap,
     Target, Megaphone, Lightbulb, MessageSquare
