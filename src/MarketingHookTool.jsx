@@ -19,7 +19,6 @@ export default function MarketingHookTool({ onTaskComplete }) {
 
     const handleGenerate = async () => {
         if (!productName.trim()) { setError('يرجى إدخال اسم المنتج.'); return; }
-        if (!OPENAI_API_KEY) { setError('مفتاح OpenAI غير موجود في ملف .env'); return; }
 
         setError('');
         setResult('');

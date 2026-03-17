@@ -48,10 +48,6 @@ export default function ArabicTashkeel({ onTaskComplete }) {
             setErrorMsg('الرجاء إدخال نص عربي أولاً.');
             return;
         }
-        if (!OPENAI_API_KEY) {
-            setErrorMsg('مفتاح OpenAI غير موجود في ملف .env');
-            return;
-        }
 
         setErrorMsg('');
         setIsProcessing(true);
