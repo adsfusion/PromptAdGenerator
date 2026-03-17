@@ -1,6 +1,4 @@
-'use client';
-
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { Download, Plus, Sliders, Maximize, Link as LinkIcon, Image as ImageIcon, Zap, Info, ArrowLeftRight, Upload } from 'lucide-react';
 import imageCompression from 'browser-image-compression';
 

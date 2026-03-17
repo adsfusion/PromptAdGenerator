@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import {
     Upload, Sparkles, Copy, Check, Info, Star, Zap,
     Target, Wrench, Wand2, Image as ImageIcon, FileText
