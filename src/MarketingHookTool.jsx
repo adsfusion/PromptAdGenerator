@@ -3,8 +3,8 @@ import {
     Sparkles, Copy, Check, Info, Star, Zap,
     Target, Megaphone, Lightbulb, MessageSquare
 } from 'lucide-react';
+import { generateContent } from './aiService';
 
-const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
 
 export default function MarketingHookTool({ onTaskComplete }) {
     const [productName, setProductName] = useState('');
@@ -19,54 +19,44 @@ export default function MarketingHookTool({ onTaskComplete }) {
 
     const handleGenerate = async () => {
         if (!productName.trim()) { setError('يرجى إدخال اسم المنتج.'); return; }
-        if (!OPENAI_API_KEY) { setError('مفتاح OpenAI غير موجود في ملف .env'); return; }
 
         setError('');
         setResult('');
         setCurrentStep('loading');
         setIsGenerating(true);
 
-        const internalPrompt = `As a World-Class Direct Response Copywriter, your task is to generate 5 powerful, attention-grabbing marketing hooks/headlines in Arabic for the following product:
+        const internalPrompt = `You are a World-Class Direct Response Copywriter specialized in E-commerce and Dropshipping. Your task is to generate 5 high-converting marketing hooks/headlines for the following product.
 
 PRODUCT: ${productName}
 AUDIENCE: ${audience || 'General'}
 CORE BENEFIT: ${benefit || 'High Quality'}
 TONE: ${tone}
 
-REQUIREMENTS:
-1. Generate exactly 5 hooks.
-2. Each hook should be short (1 sentence), punchy, and highly persuasive.
-3. Use different angles (Fear of missing out, curiosity, direct benefit, status, problem/solution).
-4. Output ONLY the 5 hooks in a numbered list. Do not add any greetings or explanations.
-5. Use professional and creative Arabic.
+STRICT COPYWRITING RULES:
+1. STRUCTURE: Use the PAS (Problem, Agitation, Solution) framework. Start by identifying the customer's pain point, escalate it, then present the product as the ultimate solution.
+2. TRANSFORMATION: Sell the outcome and the emotional shift in the customer's life, not just technical features.
+3. LANGUAGE RULES:
+   - If Arabic: Use "Simplified White Fusha" (الفصحى البيضاء المبسطة). It must be professional, elegant, and universally understood in the Gulf and Arab world. AVOID local dialects and corporate clichés (e.g., "carefully selected").
+   - If English: Use a punchy, persuasive style. Focus on benefits over features.
+   - If French/Spanish: Follow the specific cultural tones (Direct/Attractive for French, Emotional/Direct for Spanish).
+4. FORMATTING: Use professional emojis sparingly. Use line breaks for mobile readability.
+5. URGENCY: Include elements of scarcity or urgency where appropriate.
 
-Example Output:
-1. [Hook 1]
-2. [Hook 2]
+OUTPUT REQUIREMENTS:
+- Generate exactly 5 hooks.
+- Each hook must be a complete mini-copy following the rules above.
+- Output ONLY the 5 hooks in a numbered list. No greetings or meta-talk.
+
+Example Output Structure:
+1. [Hook 1 with Emojis and PAS flow]
+2. [Hook 2 with Emojis and PAS flow]
 ...`;
 
         try {
-            const response = await fetch('https://api.openai.com/v1/chat/completions', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${OPENAI_API_KEY}`
-                },
-                body: JSON.stringify({
-                    model: 'gpt-4o',
-                    messages: [{ role: 'user', content: internalPrompt }],
-                    temperature: 0.8,
-                    max_tokens: 500
-                })
+            const finalOutput = await generateContent({
+                systemPrompt: 'You are an expert World-Class Direct Response Copywriter.',
+                userPrompt: internalPrompt
             });
-
-            if (!response.ok) {
-                const errData = await response.json();
-                throw new Error(errData.error?.message || 'خطأ في الاتصال بـ OpenAI');
-            }
-
-            const data = await response.json();
-            const finalOutput = (data.choices[0]?.message?.content || '').trim();
 
             setResult(finalOutput);
             setCurrentStep('success');

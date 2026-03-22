@@ -98,8 +98,7 @@ export default function ImageCompressor({ onTaskComplete }) {
                 URL.revokeObjectURL(compressedImageURL);
             }
             setCompressedImageURL(URL.createObjectURL(compressedFile));
-        } catch (error) {
-            console.error(error);
+        } catch {
             setErrorMsg('حدث خطأ أثناء ضغط الصورة. حاول مرة أخرى.');
         } finally {
             setIsCompressing(false);
@@ -145,8 +144,7 @@ export default function ImageCompressor({ onTaskComplete }) {
                 }
                 setIsDownloading(false);
             }, 2000);
-        } catch (error) {
-            console.error("Download error:", error);
+        } catch {
             // Fallback: open in new tab so user can Save As
             window.open(compressedImageURL, '_blank');
             setIsDownloading(false);

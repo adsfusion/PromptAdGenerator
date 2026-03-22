@@ -4,9 +4,10 @@ import ImageCompressor from './ImageCompressor';
 import ArabicTashkeel from './ArabicTashkeel';
 import SocialPromptTool from './SocialPromptTool';
 import LandingPagePromptTool from './LandingPagePromptTool';
+import ProductLabelPromptTool from './ProductLabelPromptTool';
 import MarketingHookTool from './MarketingHookTool';
 import Dashboard from './Dashboard';
-import { LayoutDashboard, Megaphone, Image as ImageIcon, Type, Share2, FileText, Zap } from 'lucide-react';
+import { LayoutDashboard, Megaphone, Image as ImageIcon, Type, Share2, FileText, Zap, Tag } from 'lucide-react';
 
 export default function App() {
     // حالة (State) لتحديد أي صفحة نعرضها الآن
@@ -94,6 +95,14 @@ export default function App() {
                         <FileText size={20} />
                         <span className="font-medium">برومبت صفحة الهبوط</span>
                     </button>
+
+                    <button
+                        onClick={() => setActivePage('label-prompt')}
+                        className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${activePage === 'label-prompt' ? 'bg-purple-600/20 text-purple-400' : 'hover:bg-slate-800 text-slate-300'}`}
+                    >
+                        <Tag size={20} />
+                        <span className="font-medium">برومبت ملصقات المنتجات</span>
+                    </button>
                 </nav>
 
                 {/* القسم السفلي في الشريط الجانبي */}
@@ -116,6 +125,7 @@ export default function App() {
                 {activePage === 'tashkeel' && <ArabicTashkeel onTaskComplete={handleTaskComplete} />}
                 {activePage === 'social-prompt' && <SocialPromptTool onTaskComplete={handleTaskComplete} />}
                 {activePage === 'landing-prompt' && <LandingPagePromptTool onTaskComplete={handleTaskComplete} />}
+                {activePage === 'label-prompt' && <ProductLabelPromptTool onTaskComplete={handleTaskComplete} />}
                 {activePage === 'marketing-hook' && <MarketingHookTool onTaskComplete={handleTaskComplete} />}
             </main>
 

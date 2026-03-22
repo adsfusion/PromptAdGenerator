@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import { Copy, CheckCheck, Sparkles, Type, Eraser, AlignRight } from 'lucide-react';
+import { generateContent } from './aiService';
 
-const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
 
 const TASHKEEL_MODES = [
     {
@@ -48,10 +48,7 @@ export default function ArabicTashkeel({ onTaskComplete }) {
             setErrorMsg('الرجاء إدخال نص عربي أولاً.');
             return;
         }
-        if (!OPENAI_API_KEY) {
-            setErrorMsg('مفتاح OpenAI غير موجود في ملف .env');
-            return;
-        }
+
 
         setErrorMsg('');
         setIsProcessing(true);
@@ -71,33 +68,13 @@ export default function ArabicTashkeel({ onTaskComplete }) {
 ${inputText}`;
 
         try {
-            const response = await fetch('https://api.openai.com/v1/chat/completions', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${OPENAI_API_KEY}`
-                },
-                body: JSON.stringify({
-                    model: 'gpt-4o',
-                    messages: [
-                        { role: 'system', content: 'أنت خبير في اللغة العربية والتشكيل. لا تضف أي نص توضيحي، فقط النص المشكّل.' },
-                        { role: 'user', content: systemPrompt }
-                    ],
-                    temperature: 0.3,
-                    max_tokens: 4000
-                })
+            const finalContent = await generateContent({
+                systemPrompt: 'أنت خبير في اللغة العربية والتشكيل. لا تضف أي نص توضيحي، فقط النص المشكّل.',
+                userPrompt: systemPrompt
             });
-
-            if (!response.ok) {
-                const errData = await response.json();
-                throw new Error(errData.error?.message || 'خطأ في الاتصال بـ OpenAI');
-            }
-
-            const data = await response.json();
-            setOutputText((data.choices[0]?.message?.content || '').trim());
+            setOutputText(finalContent);
             if (onTaskComplete) onTaskComplete();
         } catch (error) {
-            console.error('OpenAI Tashkeel Error:', error);
             setErrorMsg(`خطأ في الاتصال: ${error.message || 'حاول مرة أخرى لاحقاً.'}`);
         } finally {
             setIsProcessing(false);

@@ -1,7 +1,7 @@
 import React from 'react';
 import {
     Megaphone, Share2, FileText, Type, ImageMinus,
-    Zap, Activity, Sparkles, ArrowUpRight, Star, Target
+    Zap, Activity, Sparkles, ArrowUpRight, Star, Target, Tag
 } from 'lucide-react';
 
 export default function Dashboard({ setActiveTab, tasksUsed }) {
@@ -63,6 +63,15 @@ export default function Dashboard({ setActiveTab, tasksUsed }) {
             color: 'text-orange-400',
             bg: 'bg-orange-500/10',
             border: 'hover:border-orange-500/50'
+        },
+        {
+            id: 'label-prompt',
+            title: 'برومبت ملصقات المنتجات',
+            desc: 'توليد برومبت هندسي دقيق لتصميم ملصقات وأغلفة المنتجات (Packaging) باحترافية.',
+            icon: Tag,
+            color: 'text-pink-400',
+            bg: 'bg-pink-500/10',
+            border: 'hover:border-pink-500/50'
         }
     ];
 
