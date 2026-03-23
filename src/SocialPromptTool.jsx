@@ -199,7 +199,7 @@ Create a highly engaging visual composition with smooth color gradients (specifi
 
     return (
         <div className="h-full overflow-y-auto text-slate-100" dir="rtl" style={{ scrollbarWidth: 'none' }}>
-            <div className="max-w-6xl mx-auto px-6 md:px-10 py-10">
+            <div className="max-w-6xl mx-auto px-4 md:px-10 py-10">
                 <div className="text-center mb-12">
                     <div className="inline-flex items-center gap-2 bg-purple-500/10 border border-purple-500/20 text-purple-400 text-xs font-bold px-4 py-1.5 rounded-full mb-5">
                         <Share2 size={13} /> Nano Banana Pro

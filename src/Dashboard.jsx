@@ -77,7 +77,7 @@ export default function Dashboard({ setActiveTab, tasksUsed }) {
 
     return (
         <div className="h-full overflow-y-auto text-slate-100" dir="rtl" style={{ scrollbarWidth: 'none' }}>
-            <div className="max-w-6xl mx-auto px-6 md:px-10 py-10 space-y-10">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-10 py-10 space-y-10">
 
                 {/* ── Header Section ── */}
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -98,7 +98,7 @@ export default function Dashboard({ setActiveTab, tasksUsed }) {
                     <h2 className="text-xl font-black mb-6 flex items-center gap-3">
                         <Target size={22} className="text-purple-400" /> الوصول السريع للأدوات
                     </h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         {tools.map((tool) => (
                             <div
                                 key={tool.id}
@@ -121,7 +121,7 @@ export default function Dashboard({ setActiveTab, tasksUsed }) {
                 </div>
 
                 {/* ── Stats Overview ── */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-4">
                     <div className={`${card} flex items-center gap-6 bg-slate-900/30 border-white/5 hover:border-blue-500/30 transition-colors`}>
                         <div className="w-16 h-16 rounded-2xl bg-blue-500/10 flex items-center justify-center text-blue-400 shadow-lg shadow-blue-500/5">
                             <Zap size={28} />

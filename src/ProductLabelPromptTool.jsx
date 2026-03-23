@@ -227,7 +227,7 @@ Provided User Inputs:
     // ─── Render ──────────────────────────────────────────────────────────────────
     return (
         <div className="h-full overflow-y-auto text-slate-100" dir="rtl" style={{ scrollbarWidth: 'none' }}>
-            <div className="max-w-7xl mx-auto px-6 md:px-10 py-10">
+            <div className="max-w-7xl mx-auto px-4 md:px-10 py-10">
 
                 {/* ── Header ── */}
                 <div className="text-center mb-12">
